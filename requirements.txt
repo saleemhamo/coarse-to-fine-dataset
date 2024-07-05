@@ -1,0 +1,6 @@
+torch
+torchvision
+opencv-python
+transformers
+sphinx
+sphinx-rtd-theme
