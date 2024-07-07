@@ -15,6 +15,7 @@ class CharadesSTA:
         annotations = []
         with open(file_path, 'r') as f:
             for line in f.readlines():
+                print(line)
                 video_name, rest = line.strip().split(" ", 1)
                 times, sentence = rest.split("##")
                 start_time, end_time = times.split()

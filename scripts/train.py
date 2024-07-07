@@ -10,6 +10,8 @@ def main():
     # Print the current directory
     current_directory = os.getcwd()
     print(f"Current directory: {current_directory}")
+    print(f"Data directory: {DATA_DIR}")
+    print(f"Train Annotation path: {CHARADES_ANNOTATIONS_TRAIN}")
 
     # Load Charades dataset
     dataset = get_dataset(CHARADES_STA)
