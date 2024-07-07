@@ -15,16 +15,19 @@ class CharadesSTA:
         annotations = []
         with open(file_path, 'r') as f:
             for line in f.readlines():
-                print(line)
-                video_name, rest = line.strip().split(" ", 1)
-                times, sentence = rest.split("##")
-                start_time, end_time = times.split()
-                annotations.append({
-                    "video_name": video_name,
-                    "start_time": float(start_time),
-                    "end_time": float(end_time),
-                    "sentence": sentence
-                })
+                try:
+                    video_name, rest = line.strip().split(" ", 1)
+                    times, sentence = rest.split("##")
+                    start_time, end_time = times.split()
+                    annotations.append({
+                        "video_name": video_name,
+                        "start_time": float(start_time),
+                        "end_time": float(end_time),
+                        "sentence": sentence
+                    })
+                except Exception as e:
+                    print(f"Error in line: {line}")
+                    print(e)
         return annotations
 
     def get_video_path(self, video_name):
