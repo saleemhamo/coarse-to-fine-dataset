@@ -8,9 +8,9 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 # Install any needed packages specified in requirements.txt with retries
-RUN pip install --no-cache-dir -r requirements.txt --progress=plain || \
-    pip install --no-cache-dir -r requirements.txt --progress=plain || \
-    pip install --no-cache-dir -r requirements.txt --progress=plain
+RUN pip install --no-cache-dir -r requirements.txt --progress-bar off || \
+    pip install --no-cache-dir -r requirements.txt --progress-bar off || \
+    pip install --no-cache-dir -r requirements.txt --progress-bar off
 
 # Copy the current directory contents into the container at /app
 COPY . /app/
