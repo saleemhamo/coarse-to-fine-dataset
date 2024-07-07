@@ -17,6 +17,9 @@ COPY . /app/
 ARG MOUNTED_CLAIM_DIRECTORY
 ENV MOUNTED_CLAIM_DIRECTORY=${MOUNTED_CLAIM_DIRECTORY}
 
+# Set PYTHONPATH
+ENV PYTHONPATH=/app
+
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
