@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append('/app')
+
 from data.datasets import get_dataset
 from utils.constants import *
 
