@@ -28,3 +28,4 @@ jobs:
           context: .
           push: true
           tags: saleemhamo/ctf:v0
+          build-args: MOUNTED_CLAIM_DIRECTORY=/mnt/data

@@ -13,11 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt --progress-bar off
 # Copy the current directory contents into the container at /app
 COPY . /app/
 
+# Set the environment variable for MOUNTED_CLAIM_DIRECTORY
+ARG MOUNTED_CLAIM_DIRECTORY
+ENV MOUNTED_CLAIM_DIRECTORY=${MOUNTED_CLAIM_DIRECTORY}
+
 # Make port 80 available to the world outside this container
 EXPOSE 80
-
-# Define environment variable
-ENV NAME=World
 
 # Default command to keep the container running
 CMD ["sleep", "infinity"]
