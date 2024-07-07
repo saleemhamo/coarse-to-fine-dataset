@@ -7,10 +7,8 @@ WORKDIR /app
 # Copy the requirements.txt file into the container at /app
 COPY requirements.txt /app/
 
-# Install any needed packages specified in requirements.txt with retries
-RUN pip install --no-cache-dir -r requirements.txt --progress-bar off || \
-    pip install --no-cache-dir -r requirements.txt --progress-bar off || \
-    pip install --no-cache-dir -r requirements.txt --progress-bar off
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --progress-bar off
 
 # Copy the current directory contents into the container at /app
 COPY . /app/
@@ -19,4 +17,7 @@ COPY . /app/
 EXPOSE 80
 
 # Define environment variable
-ENV NAME World
+ENV NAME=World
+
+# Default command to keep the container running
+CMD ["sleep", "infinity"]
