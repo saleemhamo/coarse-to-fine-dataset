@@ -4,7 +4,7 @@ import os
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from PIL import Image
-import clip  # Ensure correct import of CLIP
+import clip
 from data import get_dataset
 from models import VideoTextModel
 from utils import get_device, save_model
@@ -16,6 +16,9 @@ def main():
     dataset = get_dataset(CHARADES_STA)
     train_data = dataset.get_train_data()
     test_data = dataset.get_test_data()
+
+    # Set the cache directory for CLIP
+    os.environ['CLIP_CACHE_PATH'] = '/app/cache'
 
     model = VideoTextModel(device=device).to(device)
 
