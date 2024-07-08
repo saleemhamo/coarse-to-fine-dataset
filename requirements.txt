@@ -4,4 +4,6 @@ opencv-python
 transformers
 sphinx
 sphinx-rtd-theme
-numpy
+numpy~=1.26.0
+git+https://github.com/openai/CLIP.git
+Pillow
