@@ -5,5 +5,3 @@ transformers
 sphinx
 sphinx-rtd-theme
 numpy
-git+https://github.com/openai/CLIP.git
-Pillow~=10.0.1
