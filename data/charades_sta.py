@@ -1,4 +1,5 @@
 import os
+
 import cv2
 import numpy as np
 
@@ -41,7 +42,7 @@ class CharadesSTA:
             ret, frame = cap.read()
             if not ret:
                 break
-            frames.append(frame)
+            frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         cap.release()
         return np.array(frames)
 
