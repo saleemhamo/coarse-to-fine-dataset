@@ -8,9 +8,13 @@ import torch.nn as nn
 from utils.config import Config
 from utils.model_utils import save_model, get_device
 from utils.constants import CHARADES_VIDEOS_DIR, CHARADES_ANNOTATIONS_TRAIN, CHARADES_ANNOTATIONS_TEST
+from utils.logger import setup_logger
 import os
 import cv2
 import numpy as np
+
+# Setup logger
+logger = setup_logger('train_logger', 'logs/train.log')
 
 
 class CharadesSTADataset(Dataset):
@@ -19,6 +23,7 @@ class CharadesSTADataset(Dataset):
         self.video_dir = video_dir
         self.clip_model = clip_model
         self.clip_processor = clip_processor
+        logger.info(f"Initialized CharadesSTADataset with {len(annotations)} annotations.")
 
     def __len__(self):
         return len(self.annotations)
@@ -38,12 +43,14 @@ class CharadesSTADataset(Dataset):
             with torch.no_grad():
                 features = self.clip_model.get_image_features(**inputs).squeeze(0)
             video_features.append(features)
+        logger.info(f"Extracted video features for {video_name}")
         return torch.stack(video_features).mean(dim=0)  # Averaging features of all frames
 
     def extract_text_features(self, sentence):
         inputs = self.clip_processor(text=sentence, return_tensors="pt")
         with torch.no_grad():
             text_features = self.clip_model.get_text_features(**inputs).squeeze(0)
+        logger.info(f"Extracted text features for sentence: {sentence}")
         return text_features
 
     def load_video(self, video_name):
@@ -56,6 +63,7 @@ class CharadesSTADataset(Dataset):
                 break
             frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         cap.release()
+        logger.info(f"Loaded video {video_name} with {len(frames)} frames.")
         return np.array(frames)
 
 
@@ -67,6 +75,7 @@ def train_coarse_grained_model(train_loader, config):
     criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=config.coarse_grained['learning_rate'])
 
+    logger.info(f"Starting training for {config.coarse_grained['num_epochs']} epochs.")
     for epoch in range(config.coarse_grained['num_epochs']):
         model.train()
         total_loss = 0
@@ -79,12 +88,14 @@ def train_coarse_grained_model(train_loader, config):
             loss.backward()
             optimizer.step()
             total_loss += loss.item()
-        print(f"Epoch {epoch + 1}/{config.coarse_grained['num_epochs']}, Loss: {total_loss / len(train_loader)}")
+        logger.info(f"Epoch {epoch + 1}/{config.coarse_grained['num_epochs']}, Loss: {total_loss / len(train_loader)}")
 
+    logger.info("Training completed.")
     return model
 
 
 def main():
+    logger.info("Loading configuration.")
     config = Config()
     charades_sta = CharadesSTA(
         video_dir=CHARADES_VIDEOS_DIR,
@@ -94,15 +105,17 @@ def main():
     annotations = charades_sta.get_train_data()
 
     # Load CLIP model and processor
+    logger.info("Loading CLIP model and processor.")
     clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
     clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
     dataset = CharadesSTADataset(annotations, CHARADES_VIDEOS_DIR, clip_model, clip_processor)
     train_loader = DataLoader(dataset, batch_size=config.coarse_grained['batch_size'], shuffle=True)
+    logger.info("Data loader created.")
 
     model = train_coarse_grained_model(train_loader, config)
     save_path = save_model(model, "coarse_grained_model", "models/saved_models")
-    print(f"Model saved to {save_path}")
+    logger.info(f"Model saved to {save_path}")
 
 
 if __name__ == "__main__":
