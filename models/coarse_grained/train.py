@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 
 # Setup logger
-logger = setup_logger('train_logger', 'logs/train.log')
+logger = setup_logger('train_logger', 'train.log')
 
 
 class CharadesSTADataset(Dataset):
@@ -55,6 +55,7 @@ class CharadesSTADataset(Dataset):
 
     def load_video(self, video_name):
         video_path = os.path.join(self.video_dir, f"{video_name}.mp4")
+        logger.info(f"Loading video from {video_path}")
         cap = cv2.VideoCapture(video_path)
         frames = []
         while cap.isOpened():
@@ -63,7 +64,7 @@ class CharadesSTADataset(Dataset):
                 break
             frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         cap.release()
-        logger.info(f"Loaded video {video_name} with {len(frames)} frames.")
+        logger.info(f"Loaded {len(frames)} frames from video {video_name}")
         return np.array(frames)
 
 
