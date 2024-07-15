@@ -1,14 +1,13 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 from transformers import CLIPModel, CLIPProcessor
-
-import data
+from data.charades_sta import CharadesSTA
 from models.coarse_grained.model import CoarseGrainedModel
 import torch.optim as optim
 import torch.nn as nn
 from utils.config import Config
 from utils.model_utils import save_model, get_device
-from utils.constants import *
+from utils.constants import CHARADES_VIDEOS_DIR, CHARADES_ANNOTATIONS_TRAIN, CHARADES_ANNOTATIONS_TEST
 import os
 import cv2
 import numpy as np
@@ -87,7 +86,11 @@ def train_coarse_grained_model(train_loader, config):
 
 def main():
     config = Config()
-    charades_sta = data.get_dataset(CHARADES_STA)
+    charades_sta = CharadesSTA(
+        video_dir=CHARADES_VIDEOS_DIR,
+        train_file=CHARADES_ANNOTATIONS_TRAIN,
+        test_file=CHARADES_ANNOTATIONS_TEST
+    )
     annotations = charades_sta.get_train_data()
 
     # Load CLIP model and processor

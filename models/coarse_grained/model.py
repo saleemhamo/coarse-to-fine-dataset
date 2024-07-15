@@ -9,13 +9,14 @@ class CoarseGrainedModel(nn.Module):
         self.video_embedding = nn.Linear(video_dim, hidden_dim)
         self.text_embedding = nn.Linear(text_dim, hidden_dim)
         self.transformer = nn.Transformer(hidden_dim, num_encoder_layers=6, num_decoder_layers=6)
+        self.fc = nn.Linear(hidden_dim, 1)
 
     def forward(self, video_features, text_features):
         video_emb = self.video_embedding(video_features)
         text_emb = self.text_embedding(text_features)
         output = self.transformer(video_emb.unsqueeze(0), text_emb.unsqueeze(0))
-        similarity = (output * text_emb.unsqueeze(0)).sum(dim=-1)
-        return similarity
+        output = self.fc(output.squeeze(0))  # Ensure output shape is [batch_size]
+        return output.squeeze(-1)  # Ensure output shape is [batch_size]
 
 
 def get_top_k_videos(video_features, text_features, k=5):
