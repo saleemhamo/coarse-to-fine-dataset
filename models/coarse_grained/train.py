@@ -104,6 +104,7 @@ def main():
         test_file=CHARADES_ANNOTATIONS_TEST
     )
     annotations = charades_sta.get_train_data()
+    annotations = annotations[:10]  # For faster training
 
     # Load CLIP model and processor
     logger.info("Loading CLIP model and processor.")
