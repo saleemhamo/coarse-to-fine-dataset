@@ -25,7 +25,13 @@ class SingletonLogger:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
-        formatter = logging.Formatter('%d-%m-%Y %H:%M:%S - %(name)s - %(levelname)s - %(message)s')
+        # Use asctime for preformatted date and time string
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+        # Ensure the directory for the log file exists
+        log_dir = os.path.dirname(log_file)
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
 
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(formatter)
@@ -47,6 +53,10 @@ def setup_logger(name) -> SingletonLogger:
     """Function to setup a logger with the specified name and log file."""
     docker_image_name = os.getenv('DOCKER_IMAGE_NAME', 'default_image')
     job_id = os.getenv('JOB_ID', 'default_job')
+
+    # Replace invalid characters in the log file name
+    docker_image_name = docker_image_name.replace(':', '_')
+
     log_file_name = f"{docker_image_name}_{job_id}.log"
     log_file_path = os.path.join(LOGS_DIR, log_file_name)
     return SingletonLogger(name, log_file_path)
