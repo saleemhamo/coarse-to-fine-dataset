@@ -4,7 +4,7 @@ from models.coarse_grained.helpers import load_clip_model, extract_video_feature
 from utils.logger import setup_logger
 
 # Setup logger
-logger = setup_logger('coarse_grained_model_logger', 'coarse_grained_model.log')
+logger = setup_logger('coarse_grained_model_logger')
 
 
 class CoarseGrainedModel(nn.Module):

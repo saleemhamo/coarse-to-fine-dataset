@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 
 # Setup logger
-logger = setup_logger('train_logger', 'train.log')
+logger = setup_logger('train_logger')
 
 
 class CharadesSTADataset(Dataset):

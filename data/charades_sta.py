@@ -4,7 +4,7 @@ import numpy as np
 from utils.logger import setup_logger
 
 # Setup logger
-logger = setup_logger('charades_logger', 'charades.log')
+logger = setup_logger('charades_logger')
 
 
 class CharadesSTA:
