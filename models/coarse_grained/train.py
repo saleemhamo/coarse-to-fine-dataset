@@ -7,7 +7,8 @@ import torch.optim as optim
 import torch.nn as nn
 from utils.config import Config
 from utils.model_utils import save_model, get_device
-from utils.constants import CHARADES_VIDEOS_DIR, CHARADES_ANNOTATIONS_TRAIN, CHARADES_ANNOTATIONS_TEST
+from utils.constants import CHARADES_VIDEOS_DIR, CHARADES_ANNOTATIONS_TRAIN, CHARADES_ANNOTATIONS_TEST, \
+    COARSE_GRAINED_MODELS_DIR
 from utils.logger import setup_logger
 import os
 import cv2
@@ -104,7 +105,6 @@ def main():
         test_file=CHARADES_ANNOTATIONS_TEST
     )
     annotations = charades_sta.get_train_data()
-    annotations = annotations[:10]  # For faster training
 
     # Load CLIP model and processor
     logger.info("Loading CLIP model and processor.")
@@ -116,7 +116,12 @@ def main():
     logger.info("Data loader created.")
 
     model = train_coarse_grained_model(train_loader, config)
-    save_path = save_model(model, "coarse_grained_model", "models/saved_models")
+
+    docker_image_name = os.getenv('DOCKER_IMAGE_NAME', 'default_image')
+    job_id = os.getenv('JOB_ID', 'default_job')
+    model_file_name = f"model_{docker_image_name}_{job_id}.pth"
+
+    save_path = save_model(model, COARSE_GRAINED_MODELS_DIR, custom_file_name=model_file_name)
     logger.info(f"Model saved to {save_path}")
 
 
