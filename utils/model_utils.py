@@ -12,8 +12,8 @@ def save_model(model, directory, model_name=None, key=None, custom_file_name=Non
             key = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{model_name}_{key}.pth"
 
-    date = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{filename}_{date}.pth"
+    # date = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # filename = f"{filename}_{date}.pth"
 
     if not os.path.exists(directory):
         print(f"Creating directory: {directory}")
