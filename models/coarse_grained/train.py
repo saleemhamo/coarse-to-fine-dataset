@@ -13,6 +13,7 @@ from utils.logger import setup_logger
 import os
 import cv2
 import numpy as np
+import re
 
 # Setup logger
 logger = setup_logger('train_logger')
@@ -120,7 +121,8 @@ def main():
 
     docker_image_name = os.getenv('DOCKER_IMAGE_NAME', 'default_image')
     job_id = os.getenv('JOB_ID', 'default_job')
-    model_file_name = f"model_{docker_image_name}_{job_id}.pth"
+    docker_image_name = re.sub(r'[^a-zA-Z0-9]', '_', docker_image_name)
+    model_file_name = f"model_{docker_image_name}.pth"
 
     save_path = save_model(model, COARSE_GRAINED_MODELS_DIR, custom_file_name=model_file_name)
     logger.info(f"Model saved to {save_path}")
