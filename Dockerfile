@@ -21,6 +21,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY . /app/
 
+# Ensure permissions for mounted directories
+RUN mkdir -p /mnt/data/logs /mnt/data/saved_models && \
+    chmod -R 777 /mnt/data/logs /mnt/data/saved_models
+
 # Set the environment variable for MOUNTED_CLAIM_DIRECTORY
 ARG MOUNTED_CLAIM_DIRECTORY
 ENV MOUNTED_CLAIM_DIRECTORY=${MOUNTED_CLAIM_DIRECTORY}
