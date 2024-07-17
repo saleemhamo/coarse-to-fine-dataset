@@ -1,5 +1,6 @@
 import torch
 import os
+import re
 from datetime import datetime
 
 
@@ -11,6 +12,7 @@ def save_model(model, directory, model_name=None, key=None, custom_file_name=Non
             key = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{model_name}_{key}.pth"
 
+    filename = re.sub(r'[^a-zA-Z0-9]', '_', filename)
     if not os.path.exists(directory):
         os.makedirs(directory)
 

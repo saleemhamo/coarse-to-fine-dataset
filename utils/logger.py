@@ -1,9 +1,11 @@
 import logging
 import os
+import re
 from utils.constants import LOGS_DIR
 
 # Ensure the logs directory exists
 if not os.path.exists(LOGS_DIR):
+    print(f"Creating log directory: {LOGS_DIR}")
     os.makedirs(LOGS_DIR)
 
 
@@ -22,6 +24,7 @@ class SingletonLogger:
         return cls._instance
 
     def _initialize(self, name, log_file):
+        print(f"Initializing logger: {name}, log_file: {log_file}")
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
@@ -31,15 +34,18 @@ class SingletonLogger:
         # Ensure the directory for the log file exists
         log_dir = os.path.dirname(log_file)
         if not os.path.exists(log_dir):
+            print(f"Creating log file directory: {log_dir}")
             os.makedirs(log_dir)
 
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(formatter)
         self.logger.addHandler(file_handler)
+        print(f"File handler added: {log_file}")
 
         stream_handler = PrintHandler()
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
+        print(f"Stream handler added")
 
     def info(self, message):
         self.logger.info(message)
@@ -55,8 +61,10 @@ def setup_logger(name) -> SingletonLogger:
     job_id = os.getenv('JOB_ID', 'default_job')
 
     # Replace invalid characters in the log file name
-    docker_image_name = docker_image_name.replace(':', '_')
+    job_id = re.sub(r'[^a-zA-Z0-9]', '_', job_id)
+    docker_image_name = re.sub(r'[^a-zA-Z0-9]', '_', docker_image_name)
 
     log_file_name = f"{docker_image_name}_{job_id}.log"
     log_file_path = os.path.join(LOGS_DIR, log_file_name)
+    print(f"In setup_logger {name}: log_file_path={log_file_path}")
     return SingletonLogger(name, log_file_path)
