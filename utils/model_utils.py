@@ -46,5 +46,10 @@ def load_model(model, path):
     return model
 
 
-def get_device():
-    return 'cuda' if torch.cuda.is_available() else 'cpu'
+def get_device(logger=None):
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    if logger:
+        logger.info(f"Using device: {device}")
+    else:
+        print(f"Using device: {device}")
+    return device
