@@ -32,7 +32,7 @@ def train_coarse_grained_model(train_loader, config):
             video_features, text_features, labels = video_features.to(device), text_features.to(device), labels.to(
                 device)
             optimizer.zero_grad()
-            outputs = model(video_features, text_features)
+            outputs = model(video_features, text_features).squeeze(-1)  # Adjust the shape of outputs
             loss = criterion(outputs, labels.float())
             loss.backward()
             optimizer.step()
