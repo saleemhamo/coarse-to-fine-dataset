@@ -1,7 +1,8 @@
 import os
 
 # Base directory for the project
-BASE_DIR = '/nfs/workspace/coarse-to-fine-dataset'
+# BASE_DIR = '/nfs/workspace/coarse-to-fine-dataset'
+BASE_DIR = '/nfs'
 
 # Paths to external data directories
 DATA_DIR = os.path.join(BASE_DIR, 'datasets')
