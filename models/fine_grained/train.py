@@ -90,9 +90,7 @@ def main():
 
     model = fine_grained_retrieval(train_loader, config)
 
-    docker_image_name = os.getenv('DOCKER_IMAGE_NAME', 'default_image')
-    job_id = os.getenv('JOB_ID', 'default_job')
-    model_file_name = f"fine_grained_model_{docker_image_name}_{job_id}.pth"
+    model_file_name = f"model"
 
     save_path = save_model(model, FINE_GRAINED_MODELS_DIR, custom_file_name=model_file_name)
     logger.info(f"Model saved to {save_path}")

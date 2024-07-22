@@ -6,13 +6,8 @@ import torch
 
 def save_model(model, directory, model_name=None, key=None, custom_file_name=None):
     max_file_name_length = 255  # Maximum file name length in Linux
-
-    if custom_file_name:
-        filename = custom_file_name
-    else:
-        if key is None:
-            key = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{model_name}_{key}.pth"
+    key = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{model_name}_{key}.pth"
 
     # Ensure the directory exists
     if not os.path.exists(directory):

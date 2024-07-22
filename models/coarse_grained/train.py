@@ -64,10 +64,7 @@ def main():
 
     model = train_coarse_grained_model(train_loader, config)
 
-    docker_image_name = os.getenv('DOCKER_IMAGE_NAME', 'default_image')
-    job_id = os.getenv('JOB_ID', 'default_job')
-    docker_image_name = re.sub(r'[^a-zA-Z0-9]', '_', docker_image_name)
-    model_file_name = f"model_{docker_image_name}.pth"
+    model_file_name = "model"
 
     save_path = save_model(model, COARSE_GRAINED_MODELS_DIR, custom_file_name=model_file_name)
     logger.info(f"Model saved to {save_path}")

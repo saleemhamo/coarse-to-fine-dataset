@@ -1,6 +1,6 @@
 import logging
 import os
-import re
+from datetime import datetime
 from utils.constants import LOGS_DIR
 
 # Ensure the logs directory exists
@@ -57,14 +57,9 @@ class SingletonLogger:
 # Configure the logger
 def setup_logger(name) -> SingletonLogger:
     """Function to setup a logger with the specified name and log file."""
-    docker_image_name = os.getenv('DOCKER_IMAGE_NAME', 'default_image')
-    job_id = os.getenv('JOB_ID', 'default_job')
 
-    # Replace invalid characters in the log file name
-    job_id = re.sub(r'[^a-zA-Z0-9]', '_', job_id)
-    docker_image_name = re.sub(r'[^a-zA-Z0-9]', '_', docker_image_name)
-
-    log_file_name = f"{docker_image_name}_{job_id}.log"
+    key = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file_name = f"model_{key}.pth"
     log_file_path = os.path.join(LOGS_DIR, log_file_name)
     print(f"In setup_logger {name}: log_file_path={log_file_path}")
     return SingletonLogger(name, log_file_path)
