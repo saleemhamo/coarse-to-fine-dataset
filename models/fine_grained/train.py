@@ -83,6 +83,7 @@ def main():
         test_file=CHARADES_ANNOTATIONS_TEST
     )
     annotations = charades_sta.get_train_data()
+    annotations = annotations[:5]  # For testing purposes
 
     dataset = CharadesSTADatasetFineGrained(annotations, CHARADES_VIDEOS_DIR)
     train_loader = DataLoader(dataset, batch_size=config.fine_grained_batch_size, shuffle=True)
