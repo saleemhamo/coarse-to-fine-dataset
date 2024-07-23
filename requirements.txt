@@ -1,7 +1,7 @@
-torch~=2.2.1
-torchvision
+torch==2.2.1
+torchvision==0.15.2
 opencv-python~=4.9.0.80
-transformers
+transformers==4.30.0
 sphinx
 sphinx-rtd-theme
 numpy
