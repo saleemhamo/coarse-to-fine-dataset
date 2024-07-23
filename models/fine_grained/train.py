@@ -14,7 +14,7 @@ from models.fine_grained.components.cross_attention import CrossAttentionLayer
 from models.fine_grained.components.supervision import SupervisionLoss
 from models.fine_grained.components.qd_detr import QDDETRModel
 from models.fine_grained.data_loaders.charades_sta_dataset import CharadesSTADatasetFineGrained
-import os
+import numpy as np
 
 # Setup logger
 logger = setup_logger('train_logger')
@@ -98,8 +98,10 @@ def pad_sequence(sequences, batch_first=False, padding_value=0.0):
 
 def collate_fn(batch):
     video_frames, text_sentences, labels = zip(*batch)
-    video_frames_padded = pad_sequence([torch.tensor(v) for v in video_frames], batch_first=True)
-    text_sentences_padded = pad_sequence([torch.tensor(t) for t in text_sentences], batch_first=True)
+
+    # Convert video frames and text sentences to numpy arrays first
+    video_frames_padded = pad_sequence([torch.tensor(np.array(v)) for v in video_frames], batch_first=True)
+    text_sentences_padded = pad_sequence([torch.tensor(np.array(t)) for t in text_sentences], batch_first=True)
     labels = torch.tensor(labels)
     return video_frames_padded, text_sentences_padded, labels
 
