@@ -59,7 +59,7 @@ def setup_logger(name) -> SingletonLogger:
     """Function to setup a logger with the specified name and log file."""
 
     key = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file_name = f"model_{key}.pth"
+    log_file_name = f"model_{key}.log"
     log_file_path = os.path.join(LOGS_DIR, log_file_name)
     print(f"In setup_logger {name}: log_file_path={log_file_path}")
     return SingletonLogger(name, log_file_path)
