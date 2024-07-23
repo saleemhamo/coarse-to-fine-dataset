@@ -64,6 +64,8 @@ def fine_grained_retrieval(train_loader, config):
         for video_frames, text_sentence, labels in train_loader:
             video_frames, text_sentence, labels = video_frames.to(device), text_sentence.to(device), labels.to(device)
 
+            logger.info(f"Processing text_sentence: {text_sentence}")
+
             # Extract features
             enhanced_text_features = text_extractor.extract_features(text_sentence, device)
             enhanced_video_features = video_extractor.extract_features(video_frames, device)
