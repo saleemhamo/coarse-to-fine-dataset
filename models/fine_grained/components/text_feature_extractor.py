@@ -20,8 +20,10 @@ class CLIPTextFeatureExtractor:
         self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
     def extract_features(self, text, device):
+        # Check if input is already tokenized
         if isinstance(text, torch.Tensor):
-            text = text.tolist()
-        inputs = self.processor(text=text, return_tensors="pt", padding=True, truncation=True).to(device)
+            inputs = text.to(device)
+        else:
+            inputs = self.processor(text=[text], return_tensors="pt", padding=True, truncation=True).to(device)
         outputs = self.model.get_text_features(**inputs)
         return outputs
