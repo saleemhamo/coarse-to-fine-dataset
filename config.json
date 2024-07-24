@@ -1,10 +1,10 @@
 {
   "coarse_grained": {
     "clip_arch": "ViT-B/32",
-    "frame_extraction_interval": 30,
-    "learning_rate": 0.001,
-    "batch_size": 2,
-    "num_epochs": 1
+    "frame_extraction_interval": 5,
+    "learning_rate": 0.0001,
+    "batch_size": 16,
+    "num_epochs": 10
   },
   "fine_grained": {
     "batch_size": 2,

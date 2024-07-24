@@ -52,7 +52,7 @@ def main():
         test_file=CHARADES_ANNOTATIONS_TEST
     )
     annotations = charades_sta.get_train_data()
-    annotations = annotations[:5]  # For testing purposes
+    # annotations = annotations[:5]  # For testing purposes
 
     # Load feature extractor
     logger.info("Loading feature extractor.")
