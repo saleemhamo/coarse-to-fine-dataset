@@ -1,11 +1,13 @@
 import os
 import platform
 
-# Detect the operating system
-if platform.system() == 'Darwin':  # Darwin is the system name for macOS
-    BASE_DIR = '/Users/saleemhamo/Desktop/MSc Project/project'
-else:
-    BASE_DIR = '/nfs'
+# # Detect the operating system
+# if platform.system() == 'Darwin':  # Darwin is the system name for macOS
+#     BASE_DIR = '/Users/saleemhamo/Desktop/MSc Project/project'
+# else:
+#     BASE_DIR = '/nfs'
+MOUNTED_CLAIM_DIRECTORY = os.getenv('MOUNTED_CLAIM_DIRECTORY', '/Users/saleemhamo/Desktop/MSc Project/project')
+BASE_DIR = MOUNTED_CLAIM_DIRECTORY
 
 # Paths to external data directories
 DATA_DIR = os.path.join(BASE_DIR, 'datasets')

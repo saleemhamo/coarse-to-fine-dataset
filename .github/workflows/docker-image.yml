@@ -27,6 +27,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: saleemhamo/ctfg_pipeline_test_env:v0.0
+          tags: saleemhamo/ctfg_pipeline_test_env:v0.1
 
           build-args: MOUNTED_CLAIM_DIRECTORY=/mnt/data
