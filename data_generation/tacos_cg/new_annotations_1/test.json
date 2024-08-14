@@ -1,0 +1,752 @@
+[
+    {
+        "video_id": "s30-d52.avi",
+        "summarized_sentence": "A woman selects two kiwis, peels, and slices them, placing the pieces on a plate.",
+        "fps": 29.4,
+        "num_frames": 7346
+    },
+    {
+        "video_id": "s30-d52.avi",
+        "summarized_sentence": "A person retrieves kiwis, a cutting board, a plate, and a knife, then peels and chops the kiwis.",
+        "fps": 29.4,
+        "num_frames": 7346
+    },
+    {
+        "video_id": "s30-d52.avi",
+        "summarized_sentence": "She washes, peels, and cuts two kiwis, arranging the slices neatly on a plate.",
+        "fps": 29.4,
+        "num_frames": 7346
+    },
+    {
+        "video_id": "s30-d52.avi",
+        "summarized_sentence": "The woman prepares two kiwis by washing, peeling, and slicing them before cleaning up the workspace.",
+        "fps": 29.4,
+        "num_frames": 7346
+    },
+    {
+        "video_id": "s30-d52.avi",
+        "summarized_sentence": "They take out two kiwis, peel and cut them, and then clean the utensils and counter.",
+        "fps": 29.4,
+        "num_frames": 7346
+    },
+    {
+        "video_id": "s29-d42.avi",
+        "summarized_sentence": "He chops the broccoli, boils it in salted water, and strains it before serving.",
+        "fps": 29.4,
+        "num_frames": 22182
+    },
+    {
+        "video_id": "s29-d42.avi",
+        "summarized_sentence": "He prepares broccoli by cutting it into florets, boiling it, and rinsing it.",
+        "fps": 29.4,
+        "num_frames": 22182
+    },
+    {
+        "video_id": "s29-d42.avi",
+        "summarized_sentence": "He cuts broccoli, cooks it in salted boiling water, and places it on a plate.",
+        "fps": 29.4,
+        "num_frames": 22182
+    },
+    {
+        "video_id": "s29-d42.avi",
+        "summarized_sentence": "He trims broccoli, boils it with salt, and strains it before plating.",
+        "fps": 29.4,
+        "num_frames": 22182
+    },
+    {
+        "video_id": "s29-d42.avi",
+        "summarized_sentence": "He separates broccoli florets, boils them in salted water, and strains them for serving.",
+        "fps": 29.4,
+        "num_frames": 22182
+    },
+    {
+        "video_id": "s28-d39.avi",
+        "summarized_sentence": "He prepares the leeks by trimming, washing, chopping, and cooking them with butter and seasonings in a pan.",
+        "fps": 29.4,
+        "num_frames": 22892
+    },
+    {
+        "video_id": "s28-d39.avi",
+        "summarized_sentence": "He trims, washes, and chops the leeks before saut\u00e9ing them in butter and adding seasonings and water.",
+        "fps": 29.4,
+        "num_frames": 22892
+    },
+    {
+        "video_id": "s28-d39.avi",
+        "summarized_sentence": "He cuts and cleans the leeks, then cooks them in a pan with butter, seasoning them throughout the process.",
+        "fps": 29.4,
+        "num_frames": 22892
+    },
+    {
+        "video_id": "s28-d39.avi",
+        "summarized_sentence": "He chops and washes the leeks, then saut\u00e9s them in butter and adds seasonings and water before serving.",
+        "fps": 29.4,
+        "num_frames": 22892
+    },
+    {
+        "video_id": "s28-d39.avi",
+        "summarized_sentence": "He washes and chops the leeks, cooks them with butter in a pan, and adds seasonings and water until they are ready to serve.",
+        "fps": 29.4,
+        "num_frames": 22892
+    },
+    {
+        "video_id": "s29-d31.avi",
+        "summarized_sentence": "The person takes out a cutting board, a knife, and a head of garlic, then peels and minces a clove before cleaning up.",
+        "fps": 29.4,
+        "num_frames": 3148
+    },
+    {
+        "video_id": "s29-d31.avi",
+        "summarized_sentence": "A man retrieves a cutting board, knife, and garlic, slices and minces a clove, and discards the waste.",
+        "fps": 29.4,
+        "num_frames": 3148
+    },
+    {
+        "video_id": "s29-d31.avi",
+        "summarized_sentence": "The individual grabs a cutting board and knife, peels a garlic clove, minces it, and removes the garlic husk.",
+        "fps": 29.4,
+        "num_frames": 3148
+    },
+    {
+        "video_id": "s29-d31.avi",
+        "summarized_sentence": "He places a cutting board and knife on the counter, peels and minces a garlic clove, and cleans his workspace.",
+        "fps": 29.4,
+        "num_frames": 3148
+    },
+    {
+        "video_id": "s29-d31.avi",
+        "summarized_sentence": "The person prepares a cutting board and knife, peels and finely chops a garlic clove, then tidies up.",
+        "fps": 29.4,
+        "num_frames": 3148
+    },
+    {
+        "video_id": "s29-d52.avi",
+        "summarized_sentence": "The person prepares a kiwi by cutting it in half, peeling both halves, and slicing them into smaller pieces.",
+        "fps": 29.4,
+        "num_frames": 5855
+    },
+    {
+        "video_id": "s29-d52.avi",
+        "summarized_sentence": "The person retrieves a kiwi, slices it in half, peels each half, and cuts both halves into smaller sections.",
+        "fps": 29.4,
+        "num_frames": 5855
+    },
+    {
+        "video_id": "s29-d52.avi",
+        "summarized_sentence": "The person cuts a kiwi in half, peels each half, and then slices both halves into bite-sized pieces.",
+        "fps": 29.4,
+        "num_frames": 5855
+    },
+    {
+        "video_id": "s29-d52.avi",
+        "summarized_sentence": "A kiwi is cut in half, both halves are peeled, and then sliced into smaller pieces by the person.",
+        "fps": 29.4,
+        "num_frames": 5855
+    },
+    {
+        "video_id": "s29-d52.avi",
+        "summarized_sentence": "The person slices a kiwi in half, peels each half, and cuts the peeled halves into smaller segments.",
+        "fps": 29.4,
+        "num_frames": 5855
+    },
+    {
+        "video_id": "s28-d51.avi",
+        "summarized_sentence": "The man prepares and cooks broad beans, starting from washing and chopping them to frying and seasoning them in a pan.",
+        "fps": 29.4,
+        "num_frames": 19709
+    },
+    {
+        "video_id": "s28-d51.avi",
+        "summarized_sentence": "The person cleans, chops, and stir-fries broad beans, adding seasoning and serving them on a plate.",
+        "fps": 29.4,
+        "num_frames": 19709
+    },
+    {
+        "video_id": "s28-d51.avi",
+        "summarized_sentence": "He washes, cuts, and cooks broad beans in a pan, seasoning them to taste before plating.",
+        "fps": 29.4,
+        "num_frames": 19709
+    },
+    {
+        "video_id": "s28-d51.avi",
+        "summarized_sentence": "The person preps fresh broad beans by washing, cutting, and frying them, finishing with seasoning and serving.",
+        "fps": 29.4,
+        "num_frames": 19709
+    },
+    {
+        "video_id": "s28-d51.avi",
+        "summarized_sentence": "He takes broad beans from the fridge, washes and chops them, then cooks them in a pan with oil and spices.",
+        "fps": 29.4,
+        "num_frames": 19709
+    },
+    {
+        "video_id": "s27-d50.avi",
+        "summarized_sentence": "The person retrieves two glasses and an egg, cracks the egg, separates the white into the larger glass, and places the yolk in the smaller glass.",
+        "fps": 29.4,
+        "num_frames": 2414
+    },
+    {
+        "video_id": "s27-d50.avi",
+        "summarized_sentence": "The individual gets two glasses, cracks an egg, transfers the egg white into the larger glass, and deposits the yolk into the smaller glass.",
+        "fps": 29.4,
+        "num_frames": 2414
+    },
+    {
+        "video_id": "s27-d50.avi",
+        "summarized_sentence": "The person takes out two glasses, cracks an egg, carefully separates the white into one glass, and puts the yolk into the other glass.",
+        "fps": 29.4,
+        "num_frames": 2414
+    },
+    {
+        "video_id": "s27-d50.avi",
+        "summarized_sentence": "The person sets up two glasses, cracks an egg, separates the white into the larger glass, and moves the yolk to the smaller glass.",
+        "fps": 29.4,
+        "num_frames": 2414
+    },
+    {
+        "video_id": "s27-d50.avi",
+        "summarized_sentence": "The person takes out a glass and a smaller glass, cracks an egg, transfers the egg white into the larger glass, and places the yolk in the smaller glass.",
+        "fps": 29.4,
+        "num_frames": 2414
+    },
+    {
+        "video_id": "s28-d46.avi",
+        "summarized_sentence": "The person takes out a cutting board, knife, and pineapple, then slices and dices the fruit, placing the pieces on a plate and in a bowl.",
+        "fps": 29.4,
+        "num_frames": 11146
+    },
+    {
+        "video_id": "s28-d46.avi",
+        "summarized_sentence": "A man prepares a pineapple by cutting off the ends, slicing it into disks, removing the rind, and chopping the pieces into smaller chunks.",
+        "fps": 29.4,
+        "num_frames": 11146
+    },
+    {
+        "video_id": "s28-d46.avi",
+        "summarized_sentence": "A person cuts the bottom off a pineapple, slices it, trims the edges, and places the pieces on a plate before transferring some into a bowl.",
+        "fps": 29.4,
+        "num_frames": 11146
+    },
+    {
+        "video_id": "s28-d46.avi",
+        "summarized_sentence": "The man retrieves a cutting board, knife, and pineapple, slices the pineapple, discards the ends, trims the slices, and places the pieces on a plate and in a bowl.",
+        "fps": 29.4,
+        "num_frames": 11146
+    },
+    {
+        "video_id": "s28-d46.avi",
+        "summarized_sentence": "The person uses a knife to cut a pineapple into slices, removes the rind, dices the pieces, and distributes them onto a plate and into a bowl.",
+        "fps": 29.4,
+        "num_frames": 11146
+    },
+    {
+        "video_id": "s29-d39.avi",
+        "summarized_sentence": "He prepares leeks by washing, chopping, and cooking them in a pan with oil.",
+        "fps": 29.4,
+        "num_frames": 9614
+    },
+    {
+        "video_id": "s29-d39.avi",
+        "summarized_sentence": "He washes, slices, and saut\u00e9s leeks in a frying pan.",
+        "fps": 29.4,
+        "num_frames": 9614
+    },
+    {
+        "video_id": "s29-d39.avi",
+        "summarized_sentence": "He dices a leek and cooks it in a pan with some oil.",
+        "fps": 29.4,
+        "num_frames": 9614
+    },
+    {
+        "video_id": "s29-d39.avi",
+        "summarized_sentence": "He cleans, chops, and fries leeks in a heated pan.",
+        "fps": 29.4,
+        "num_frames": 9614
+    },
+    {
+        "video_id": "s29-d39.avi",
+        "summarized_sentence": "He preps and cooks leeks in a pan with added oil.",
+        "fps": 29.4,
+        "num_frames": 9614
+    },
+    {
+        "video_id": "s32-d52.avi",
+        "summarized_sentence": "A woman retrieves a kiwi from the refrigerator, washes it, peels it, slices it into thin rounds, and places the slices on a plate.",
+        "fps": 29.4,
+        "num_frames": 5492
+    },
+    {
+        "video_id": "s32-d52.avi",
+        "summarized_sentence": "A person takes a kiwi out of the fridge, peels it, slices it into discs, and arranges the slices on a plate.",
+        "fps": 29.4,
+        "num_frames": 5492
+    },
+    {
+        "video_id": "s32-d52.avi",
+        "summarized_sentence": "After washing and peeling a kiwi, the woman slices it thinly and places the slices on a plate.",
+        "fps": 29.4,
+        "num_frames": 5492
+    },
+    {
+        "video_id": "s32-d52.avi",
+        "summarized_sentence": "The woman cuts off the ends of a washed kiwi, peels it, slices it, and arranges the slices on a plate.",
+        "fps": 29.4,
+        "num_frames": 5492
+    },
+    {
+        "video_id": "s32-d52.avi",
+        "summarized_sentence": "A person removes a kiwi from the fridge, washes it, peels it, slices it, and puts the slices on a plate.",
+        "fps": 29.4,
+        "num_frames": 5492
+    },
+    {
+        "video_id": "s28-d27.avi",
+        "summarized_sentence": "The person chops an onion, then saut\u00e9es it with oil and salt until golden brown.",
+        "fps": 29.4,
+        "num_frames": 17219
+    },
+    {
+        "video_id": "s28-d27.avi",
+        "summarized_sentence": "The person dices an onion, cooks it in a pan with oil, and seasons it with salt.",
+        "fps": 29.4,
+        "num_frames": 17219
+    },
+    {
+        "video_id": "s28-d27.avi",
+        "summarized_sentence": "The person peels, chops, and saut\u00e9es an onion in a pan with oil until it is golden brown.",
+        "fps": 29.4,
+        "num_frames": 17219
+    },
+    {
+        "video_id": "s28-d27.avi",
+        "summarized_sentence": "The person prepares an onion by dicing it and saut\u00e9eing it in a pan with oil and salt.",
+        "fps": 29.4,
+        "num_frames": 17219
+    },
+    {
+        "video_id": "s28-d27.avi",
+        "summarized_sentence": "The person cuts, saut\u00e9es, and seasons an onion in a pan with oil.",
+        "fps": 29.4,
+        "num_frames": 17219
+    },
+    {
+        "video_id": "s30-d40.avi",
+        "summarized_sentence": "A girl takes out a lime and a cutting board.",
+        "fps": 29.4,
+        "num_frames": 4895
+    },
+    {
+        "video_id": "s30-d40.avi",
+        "summarized_sentence": "She washes the lime and cuts it in half.",
+        "fps": 29.4,
+        "num_frames": 4895
+    },
+    {
+        "video_id": "s30-d40.avi",
+        "summarized_sentence": "She uses a juicer to extract juice from both halves of the lime.",
+        "fps": 29.4,
+        "num_frames": 4895
+    },
+    {
+        "video_id": "s30-d40.avi",
+        "summarized_sentence": "She cuts slits into the second half of the lime to make juicing easier.",
+        "fps": 29.4,
+        "num_frames": 4895
+    },
+    {
+        "video_id": "s30-d40.avi",
+        "summarized_sentence": "She washes the knife after juicing both halves of the lime.",
+        "fps": 29.4,
+        "num_frames": 4895
+    },
+    {
+        "video_id": "s31-d28.avi",
+        "summarized_sentence": "An orange is peeled, cut into quarters, and placed on a plate.",
+        "fps": 29.4,
+        "num_frames": 5825
+    },
+    {
+        "video_id": "s31-d28.avi",
+        "summarized_sentence": "The person retrieves an orange, peels it, quarters it, and arranges the pieces on a plate.",
+        "fps": 29.4,
+        "num_frames": 5825
+    },
+    {
+        "video_id": "s31-d28.avi",
+        "summarized_sentence": "The man takes an orange, peels and quarters it, then places the pieces on a plate.",
+        "fps": 29.4,
+        "num_frames": 5825
+    },
+    {
+        "video_id": "s31-d28.avi",
+        "summarized_sentence": "An orange is taken from the fridge, peeled, cut into four pieces, and served on a plate.",
+        "fps": 29.4,
+        "num_frames": 5825
+    },
+    {
+        "video_id": "s31-d28.avi",
+        "summarized_sentence": "The individual prepares an orange by peeling, slicing it into quarters, and placing the pieces on a plate.",
+        "fps": 29.4,
+        "num_frames": 5825
+    },
+    {
+        "video_id": "s32-d27.avi",
+        "summarized_sentence": "She washes, peels, and minces an onion before adding it to a bowl with water and salt.",
+        "fps": 29.4,
+        "num_frames": 22525
+    },
+    {
+        "video_id": "s32-d27.avi",
+        "summarized_sentence": "She drains the rinsed onion pieces, then cooks them in a buttered pan until browned.",
+        "fps": 29.4,
+        "num_frames": 22525
+    },
+    {
+        "video_id": "s32-d27.avi",
+        "summarized_sentence": "An onion is peeled, chopped, and seasoned with salt before being rinsed and drained.",
+        "fps": 29.4,
+        "num_frames": 22525
+    },
+    {
+        "video_id": "s32-d27.avi",
+        "summarized_sentence": "She cooks the seasoned onions in butter until they are browned and places them on a plate.",
+        "fps": 29.4,
+        "num_frames": 22525
+    },
+    {
+        "video_id": "s32-d27.avi",
+        "summarized_sentence": "The minced onion is first soaked in salted water, then drained and saut\u00e9ed in butter.",
+        "fps": 29.4,
+        "num_frames": 22525
+    },
+    {
+        "video_id": "s27-d54.avi",
+        "summarized_sentence": "He takes out a mango, washes it, and cuts it into pieces.",
+        "fps": 29.4,
+        "num_frames": 10953
+    },
+    {
+        "video_id": "s27-d54.avi",
+        "summarized_sentence": "Mango slices are placed on a plate and seasoned.",
+        "fps": 29.4,
+        "num_frames": 10953
+    },
+    {
+        "video_id": "s27-d54.avi",
+        "summarized_sentence": "The mango is cut in half and diced before being served.",
+        "fps": 29.4,
+        "num_frames": 10953
+    },
+    {
+        "video_id": "s27-d54.avi",
+        "summarized_sentence": "The person discards the mango pit and arranges the pieces on a plate.",
+        "fps": 29.4,
+        "num_frames": 10953
+    },
+    {
+        "video_id": "s27-d54.avi",
+        "summarized_sentence": "The mango is thoroughly washed, cut, and transferred to a serving plate.",
+        "fps": 29.4,
+        "num_frames": 10953
+    },
+    {
+        "video_id": "s30-d41.avi",
+        "summarized_sentence": "A person retrieves a pomegranate, cuts it into quarters, and extracts the seeds onto a plate.",
+        "fps": 29.4,
+        "num_frames": 19147
+    },
+    {
+        "video_id": "s30-d41.avi",
+        "summarized_sentence": "The individual prepares a pomegranate by cutting it into pieces and removing the seeds by hand.",
+        "fps": 29.4,
+        "num_frames": 19147
+    },
+    {
+        "video_id": "s30-d41.avi",
+        "summarized_sentence": "A pomegranate is sliced, quartered, and the seeds are meticulously scooped out and placed on a plate.",
+        "fps": 29.4,
+        "num_frames": 19147
+    },
+    {
+        "video_id": "s30-d41.avi",
+        "summarized_sentence": "The person carefully quarters a pomegranate and collects the seeds in a dish.",
+        "fps": 29.4,
+        "num_frames": 19147
+    },
+    {
+        "video_id": "s30-d41.avi",
+        "summarized_sentence": "A pomegranate is cut and the seeds are separated from the rind and collected onto a plate.",
+        "fps": 29.4,
+        "num_frames": 19147
+    },
+    {
+        "video_id": "s31-d31.avi",
+        "summarized_sentence": "A man retrieves garlic from the cupboard, peels and washes the cloves, and dices them on a cutting board with a knife before placing the chopped garlic on a plate.",
+        "fps": 29.4,
+        "num_frames": 6257
+    },
+    {
+        "video_id": "s31-d31.avi",
+        "summarized_sentence": "After peeling and washing garlic cloves, a man dices them on a cutting board and transfers the pieces to a plate.",
+        "fps": 29.4,
+        "num_frames": 6257
+    },
+    {
+        "video_id": "s31-d31.avi",
+        "summarized_sentence": "The man peels, washes, and dices garlic cloves, then places the pieces on a plate and cleans up the cutting board and knife.",
+        "fps": 29.4,
+        "num_frames": 6257
+    },
+    {
+        "video_id": "s31-d31.avi",
+        "summarized_sentence": "A man takes garlic from the cupboard, peels and washes the cloves, dices them, and places the chopped garlic on a plate before cleaning the utensils.",
+        "fps": 29.4,
+        "num_frames": 6257
+    },
+    {
+        "video_id": "s31-d31.avi",
+        "summarized_sentence": "He peels and washes garlic cloves, cuts and dices them, and then places the diced garlic on a plate, cleaning up the cutting board and knife afterwards.",
+        "fps": 29.4,
+        "num_frames": 6257
+    },
+    {
+        "video_id": "s27-d70.avi",
+        "summarized_sentence": "An orange is taken from the fridge, cut in half, and juiced.",
+        "fps": 29.4,
+        "num_frames": 8202
+    },
+    {
+        "video_id": "s27-d70.avi",
+        "summarized_sentence": "The juice from an orange is poured into a glass and sweetened with sugar.",
+        "fps": 29.4,
+        "num_frames": 8202
+    },
+    {
+        "video_id": "s27-d70.avi",
+        "summarized_sentence": "A man retrieves an orange, cuts it in half, and extracts the juice using a juicer.",
+        "fps": 29.4,
+        "num_frames": 8202
+    },
+    {
+        "video_id": "s27-d70.avi",
+        "summarized_sentence": "The person pours freshly squeezed orange juice into a glass and adds sugar.",
+        "fps": 29.4,
+        "num_frames": 8202
+    },
+    {
+        "video_id": "s27-d70.avi",
+        "summarized_sentence": "An orange is juiced, and the resulting juice is sweetened and stirred in a glass.",
+        "fps": 29.4,
+        "num_frames": 8202
+    },
+    {
+        "video_id": "s30-d26.avi",
+        "summarized_sentence": "She fills a pot with water, adds salt, and brings it to a boil before adding chopped cauliflower pieces.",
+        "fps": 29.4,
+        "num_frames": 17114
+    },
+    {
+        "video_id": "s30-d26.avi",
+        "summarized_sentence": "She rinses a head of cauliflower, cuts it into pieces, and places them in a boiling pot of salted water.",
+        "fps": 29.4,
+        "num_frames": 17114
+    },
+    {
+        "video_id": "s30-d26.avi",
+        "summarized_sentence": "While the cauliflower cooks, she cleans the kitchen and tests the tenderness of the pieces with a fork.",
+        "fps": 29.4,
+        "num_frames": 17114
+    },
+    {
+        "video_id": "s30-d26.avi",
+        "summarized_sentence": "After boiling, she strains the cauliflower and empties it onto a plate.",
+        "fps": 29.4,
+        "num_frames": 17114
+    },
+    {
+        "video_id": "s30-d26.avi",
+        "summarized_sentence": "She prepares the cauliflower by washing, cutting, boiling, and finally straining it before serving.",
+        "fps": 29.4,
+        "num_frames": 17114
+    },
+    {
+        "video_id": "s29-d50.avi",
+        "summarized_sentence": "The person retrieves a measuring cup, fills it with water, dips an egg in the water, then separates the egg white and yolk into two cups, and discards the shell.",
+        "fps": 29.4,
+        "num_frames": 2831
+    },
+    {
+        "video_id": "s29-d50.avi",
+        "summarized_sentence": "The man fills a measuring cup with water, checks an egg in the cup, then separates the egg white and yolk into different cups, and throws away the shell.",
+        "fps": 29.4,
+        "num_frames": 2831
+    },
+    {
+        "video_id": "s29-d50.avi",
+        "summarized_sentence": "A measuring cup is filled with water, an egg is dipped in, then the egg is cracked and separated into white and yolk in two cups, and the shell is discarded.",
+        "fps": 29.4,
+        "num_frames": 2831
+    },
+    {
+        "video_id": "s29-d50.avi",
+        "summarized_sentence": "The person fills a glass with water, dips an egg in it, separates the egg white and yolk into two cups, and discards the shell.",
+        "fps": 29.4,
+        "num_frames": 2831
+    },
+    {
+        "video_id": "s29-d50.avi",
+        "summarized_sentence": "The man takes a measuring cup, fills it with water, dips an egg, separates the egg into white and yolk in two cups, and discards the shell.",
+        "fps": 29.4,
+        "num_frames": 2831
+    },
+    {
+        "video_id": "s31-d25.avi",
+        "summarized_sentence": "The person retrieves bread, a plate, a cutting board, and a knife, washes their hands, slices two pieces from the loaf, and cleans up the crumbs.",
+        "fps": 29.4,
+        "num_frames": 2634
+    },
+    {
+        "video_id": "s31-d25.avi",
+        "summarized_sentence": "The person gets bread from the fridge, a plate from the cabinet, a cutting board, and a knife, washes hands, slices two pieces of bread, and cleans the crumbs.",
+        "fps": 29.4,
+        "num_frames": 2634
+    },
+    {
+        "video_id": "s31-d25.avi",
+        "summarized_sentence": "The person gathers bread, a plate, a cutting board, and a knife, washes hands, slices the bread, and disposes of the crumbs.",
+        "fps": 29.4,
+        "num_frames": 2634
+    },
+    {
+        "video_id": "s31-d25.avi",
+        "summarized_sentence": "The person takes bread, a plate, a cutting board, and a knife, washes hands, slices two pieces of bread, and puts the remaining bread back.",
+        "fps": 29.4,
+        "num_frames": 2634
+    },
+    {
+        "video_id": "s31-d25.avi",
+        "summarized_sentence": "The person grabs bread, a plate, a cutting board, and a knife, washes hands, slices the bread, and cleans the board.",
+        "fps": 29.4,
+        "num_frames": 2634
+    },
+    {
+        "video_id": "s30-d53.avi",
+        "summarized_sentence": "A woman prepares an avocado by washing, peeling, and slicing it before seasoning and mashing it with a fork.",
+        "fps": 29.4,
+        "num_frames": 13363
+    },
+    {
+        "video_id": "s30-d53.avi",
+        "summarized_sentence": "The person retrieves an avocado, washes and peels it, then slices and seasons it before mashing it with a fork.",
+        "fps": 29.4,
+        "num_frames": 13363
+    },
+    {
+        "video_id": "s30-d53.avi",
+        "summarized_sentence": "She takes an avocado, washes and peels it, slices it around the pit, and then seasons and mashes it.",
+        "fps": 29.4,
+        "num_frames": 13363
+    },
+    {
+        "video_id": "s30-d53.avi",
+        "summarized_sentence": "The woman washes, peels, and slices an avocado, then seasons it with salt and pepper before mashing it with a fork.",
+        "fps": 29.4,
+        "num_frames": 13363
+    },
+    {
+        "video_id": "s30-d53.avi",
+        "summarized_sentence": "She prepares an avocado by washing, peeling, slicing, seasoning, and mashing it with a fork.",
+        "fps": 29.4,
+        "num_frames": 13363
+    },
+    {
+        "video_id": "s28-d25.avi",
+        "summarized_sentence": "The person takes out a cutting board, a knife, and a loaf of bread, cuts two slices, and then puts the bread away.",
+        "fps": 29.4,
+        "num_frames": 3204
+    },
+    {
+        "video_id": "s28-d25.avi",
+        "summarized_sentence": "The person places the slices of bread on a plate after cutting them from the loaf.",
+        "fps": 29.4,
+        "num_frames": 3204
+    },
+    {
+        "video_id": "s28-d25.avi",
+        "summarized_sentence": "The person cleans the knife, sweeps the crumbs into the trash, and puts away the cutting board.",
+        "fps": 29.4,
+        "num_frames": 3204
+    },
+    {
+        "video_id": "s28-d25.avi",
+        "summarized_sentence": "The person retrieves a plate from the cabinet and places the bread slices on it.",
+        "fps": 29.4,
+        "num_frames": 3204
+    },
+    {
+        "video_id": "s28-d25.avi",
+        "summarized_sentence": "The person washes the knife and returns it to the drawer.",
+        "fps": 29.4,
+        "num_frames": 3204
+    },
+    {
+        "video_id": "s30-d43.avi",
+        "summarized_sentence": "The woman prepares and fries potato slices until they are golden brown.",
+        "fps": 29.4,
+        "num_frames": 19791
+    },
+    {
+        "video_id": "s30-d43.avi",
+        "summarized_sentence": "The woman peels, rinses, and slices potatoes before frying them in oil.",
+        "fps": 29.4,
+        "num_frames": 19791
+    },
+    {
+        "video_id": "s30-d43.avi",
+        "summarized_sentence": "The woman sets up her station, heats oil in a pan, and cooks potato slices.",
+        "fps": 29.4,
+        "num_frames": 19791
+    },
+    {
+        "video_id": "s30-d43.avi",
+        "summarized_sentence": "The woman cleans the peels, cooks the potatoes, and serves them with ketchup and salt.",
+        "fps": 29.4,
+        "num_frames": 19791
+    },
+    {
+        "video_id": "s30-d43.avi",
+        "summarized_sentence": "The woman cleans and peels potatoes, then slices and fries them in a preheated pan.",
+        "fps": 29.4,
+        "num_frames": 19791
+    },
+    {
+        "video_id": "s30-d29.avi",
+        "summarized_sentence": "The person gets herbs from the fridge, rinses them, and chops them before placing them on a plate.",
+        "fps": 29.4,
+        "num_frames": 6099
+    },
+    {
+        "video_id": "s30-d29.avi",
+        "summarized_sentence": "The person retrieves a cutting board, knife, and plate, then washes and dices herbs, discarding the stems.",
+        "fps": 29.4,
+        "num_frames": 6099
+    },
+    {
+        "video_id": "s30-d29.avi",
+        "summarized_sentence": "The person washes, chops, and plates two different sets of herbs, cleaning up afterwards.",
+        "fps": 29.4,
+        "num_frames": 6099
+    },
+    {
+        "video_id": "s30-d29.avi",
+        "summarized_sentence": "The person gathers herbs, washes them, cuts them into small pieces, and arranges them on a plate.",
+        "fps": 29.4,
+        "num_frames": 6099
+    },
+    {
+        "video_id": "s30-d29.avi",
+        "summarized_sentence": "The person prepares and washes fresh herbs, finely chops them, and transfers them to a plate while discarding the stems.",
+        "fps": 29.4,
+        "num_frames": 6099
+    }
+]
