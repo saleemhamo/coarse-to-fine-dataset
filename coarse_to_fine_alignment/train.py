@@ -8,9 +8,9 @@ from torch.nn import CosineSimilarity
 
 from dataloaders.tacos_dataloader import TACoSDataset, collate_fn
 
-# Set up logging to a file
-log_file = 'training.log'
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', filename=log_file)
+# Configure logging
+log_file = 'training_log.txt'
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', filename=log_file, filemode='w')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -39,14 +39,14 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
     train_sampler = torch.utils.data.SubsetRandomSampler(train_idx)
     val_sampler = torch.utils.data.SubsetRandomSampler(val_idx)
 
-    train_dataloader = DataLoader(train_dataset, batch_size=32, sampler=train_sampler, collate_fn=collate_fn)
-    val_dataloader = DataLoader(train_dataset, batch_size=32, sampler=val_sampler, collate_fn=collate_fn)
+    train_dataloader = DataLoader(train_dataset, batch_size=16, sampler=train_sampler, collate_fn=collate_fn)
+    val_dataloader = DataLoader(train_dataset, batch_size=16, sampler=val_sampler, collate_fn=collate_fn)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-5)
     cosine_similarity = CosineSimilarity(dim=1)
 
     model.train()
-    for epoch in range(5):
+    for epoch in range(5):  # Increased the number of epochs to 5
         logging.info(f"Epoch {epoch + 1}/{5}")
         for batch in train_dataloader:
             optimizer.zero_grad()
@@ -63,7 +63,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             fine_logits = fine_outputs.logits
             coarse_logits = coarse_outputs.logits
 
-            loss = -cosine_similarity(fine_logits, coarse_logits).mean()  # Contrastive loss
+            loss = -cosine_similarity(fine_logits, coarse_logits).mean()
 
             logging.info(f"Training Loss: {loss.item()}")
 
@@ -93,7 +93,9 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             total_loss += loss.item()
 
             similarities = torch.matmul(fine_logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
-            predictions = torch.topk(similarities, k=100, dim=1).indices
+
+            k_max = min(100, similarities.size(1))  # Ensure k is within bounds
+            predictions = torch.topk(similarities, k=k_max, dim=1).indices
             all_predictions.extend(predictions.cpu().numpy())
             all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())
 
@@ -107,11 +109,12 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
     avg_val_loss = total_loss / len(val_dataloader)
     logging.info(f"Fold {fold + 1} Validation Loss: {avg_val_loss}")
 
-    recall_1 = recall_at_k(all_predictions, all_labels, k=1)
-    recall_5 = recall_at_k(all_predictions, all_labels, k=5)
-    recall_10 = recall_at_k(all_predictions, all_labels, k=10)
-    recall_50 = recall_at_k(all_predictions, all_labels, k=50)
-    recall_100 = recall_at_k(all_predictions, all_labels, k=100)
+    recall_1 = recall_at_k(all_predictions, all_labels, k=min(1, k_max))
+    recall_5 = recall_at_k(all_predictions, all_labels, k=min(5, k_max))
+    recall_10 = recall_at_k(all_predictions, all_labels, k=min(10, k_max))
+    recall_50 = recall_at_k(all_predictions, all_labels, k=min(50, k_max))
+    recall_100 = recall_at_k(all_predictions, all_labels, k=min(100, k_max))
+
     logging.info(f"Fold {fold + 1} Recall@1: {recall_1}")
     logging.info(f"Fold {fold + 1} Recall@5: {recall_5}")
     logging.info(f"Fold {fold + 1} Recall@10: {recall_10}")
