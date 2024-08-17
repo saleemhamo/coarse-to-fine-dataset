@@ -1,9 +1,0 @@
-[submodule "coarse_grained/T-MASS"]
-	path = coarse_grained/T-MASS
-	url = git@github.com:saleemhamo/T-MASS.git
-[submodule "coarse_grained/T-MASS-V2"]
-	path = coarse_grained/T-MASS-V2
-	url = git@github.com:saleemhamo/T-MASS-V2.git
-[submodule "fine_grained/MESM"]
-	path = fine_grained/MESM
-	url = git@github.com:saleemhamo/MESM.git
