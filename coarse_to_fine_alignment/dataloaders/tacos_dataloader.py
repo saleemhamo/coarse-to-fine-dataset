@@ -1,8 +1,6 @@
 import json
-import os
-import torch
+
 from torch.utils.data import Dataset
-from torch.nn.utils.rnn import pad_sequence
 
 
 class TACoSDataset(Dataset):
@@ -60,22 +58,34 @@ class TACoSDataset(Dataset):
 
 
 import torch
-from torch.nn.utils.rnn import pad_sequence
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def collate_fn(batch):
+    logging.info("Collate function called.")
+
     input_ids = [item['input_ids'] for item in batch]
     attention_mask = [item['attention_mask'] for item in batch]
     labels = [item['labels'] for item in batch]
 
-    # Check if all sequences are non-empty
-    if any(len(seq) == 0 for seq in input_ids) or any(len(seq) == 0 for seq in labels):
+    # Log the shape of each sequence in the batch
+    for i, (inp, lbl) in enumerate(zip(input_ids, labels)):
+        logging.debug(f"Sequence {i}: Input ID length = {inp.size()}, Label length = {lbl.size()}")
+
+    # Check for any 0-d tensors (empty sequences)
+    if any(seq.dim() == 0 for seq in input_ids) or any(seq.dim() == 0 for seq in labels):
+        logging.error("Found a 0-d tensor in the batch. This likely indicates an issue with the data.")
         raise ValueError("Found empty sequence in the batch.")
 
     # Pad sequences to the max length in this batch
     input_ids = torch.nn.utils.rnn.pad_sequence(input_ids, batch_first=True, padding_value=0)
     attention_mask = torch.nn.utils.rnn.pad_sequence(attention_mask, batch_first=True, padding_value=0)
     labels = torch.nn.utils.rnn.pad_sequence(labels, batch_first=True, padding_value=0)
+
+    logging.info("Collate function completed successfully.")
 
     return {
         'input_ids': input_ids,
