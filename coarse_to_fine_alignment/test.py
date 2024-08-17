@@ -1,18 +1,18 @@
 import torch
-import json
 import logging
 from transformers import BertTokenizer, BertForSequenceClassification
 from torch.utils.data import DataLoader
 from dataloaders.tacos_dataloader import TACoSDataset, collate_fn
+import os
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging to write to a file
+logging.basicConfig(filename='evaluation.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load the pre-trained BERT tokenizer and the saved model
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=tokenizer.vocab_size)
+model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
 model.load_state_dict(torch.load('output/final_model.pth'))
 model.to(device)
 model.eval()
@@ -21,6 +21,7 @@ model.eval()
 test_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 test_dataloader = DataLoader(test_dataset, batch_size=16, collate_fn=collate_fn)
 
+
 def recall_at_k(predictions, labels, k):
     recall = 0
     for i in range(len(labels)):
@@ -28,8 +29,9 @@ def recall_at_k(predictions, labels, k):
             recall += 1
     return recall / len(labels)
 
+
 # Evaluation function
-def evaluate(model, dataloader, k_values=[1, 5, 10]):
+def evaluate(model, dataloader, k_values=[1, 5, 10, 50, 100]):
     model.eval()
     all_predictions = []
     all_labels = []
@@ -51,18 +53,26 @@ def evaluate(model, dataloader, k_values=[1, 5, 10]):
 
             # Calculate similarities
             similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
-            predictions = torch.topk(similarities, k=max(k_values), dim=1).indices  # Get top-k predictions
+
+            # Ensure that k does not exceed the number of available coarse logits
+            k_max = min(max(k_values), similarities.size(1))
+            predictions = torch.topk(similarities, k=k_max, dim=1).indices  # Get top-k predictions
 
             all_predictions.extend(predictions.cpu().numpy())
             all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())  # Ground truth positions
 
     recalls = {}
     for k in k_values:
-        recalls[f'R@{k}'] = recall_at_k(all_predictions, all_labels, k)
+        if k <= k_max:  # Ensure k is within bounds
+            recalls[f'R@{k}'] = recall_at_k(all_predictions, all_labels, k)
 
     return recalls
+
 
 # Run evaluation
 logging.info("Starting evaluation...")
 recalls = evaluate(model, test_dataloader)
 logging.info(f"Evaluation Results: {recalls}")
+
+# Print results to console as well
+print(f"Evaluation Results: {recalls}")
