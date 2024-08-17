@@ -62,10 +62,15 @@ class TACoSDataset(Dataset):
 import torch
 from torch.nn.utils.rnn import pad_sequence
 
+
 def collate_fn(batch):
     input_ids = [item['input_ids'] for item in batch]
     attention_mask = [item['attention_mask'] for item in batch]
     labels = [item['labels'] for item in batch]
+
+    # Check if all sequences are non-empty
+    if any(len(seq) == 0 for seq in input_ids) or any(len(seq) == 0 for seq in labels):
+        raise ValueError("Found empty sequence in the batch.")
 
     # Pad sequences to the max length in this batch
     input_ids = torch.nn.utils.rnn.pad_sequence(input_ids, batch_first=True, padding_value=0)
