@@ -53,6 +53,7 @@ class TACoSDataset(Dataset):
             return_tensors="pt"
         )
 
+        print(f"labels.size {len(labels)}")
         if labels['input_ids'].size(1) == 0:
             logging.error(f"Empty label for video_id {video_id}")
 
