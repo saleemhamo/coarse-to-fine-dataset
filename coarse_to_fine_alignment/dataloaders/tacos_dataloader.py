@@ -2,6 +2,7 @@ import json
 import torch
 import logging
 from torch.utils.data import Dataset
+from collections import defaultdict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -22,10 +23,10 @@ class TACoSDataset(Dataset):
     def load_coarse_summaries(self, file_path):
         with open(file_path, 'r') as f:
             data = json.load(f)
-            summaries = {}
+            summaries = defaultdict(list)
             for item in data:
                 video_id = item['video_id']
-                summaries[video_id] = item['summarized_sentence']
+                summaries[video_id].append(item['summarized_sentence'])
             return summaries
 
     def __len__(self):
@@ -34,7 +35,10 @@ class TACoSDataset(Dataset):
     def __getitem__(self, idx):
         video_id = self.video_ids[idx]
         fine_text = self.fine_annotations[video_id]['sentences']
-        coarse_text = self.coarse_summaries.get(video_id, "[UNK]")
+
+        # Get all coarse summaries for the given video ID
+        coarse_texts = self.coarse_summaries.get(video_id, ["[UNK]"])
+        coarse_text = ' '.join(coarse_texts)  # Combine all coarse summaries into one text
 
         inputs = self.tokenizer.encode_plus(
             fine_text,
