@@ -56,6 +56,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
 
+    # Training Loop
     model.train()
     for epoch in range(3):  # Train for a few epochs
         for batch in train_dataloader:

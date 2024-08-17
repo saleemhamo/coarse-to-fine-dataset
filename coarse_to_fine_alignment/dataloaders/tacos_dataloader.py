@@ -28,30 +28,30 @@ class TACoSDataset(Dataset):
         return len(self.video_ids)
 
     def __getitem__(self, idx):
-        video_id = self.video_ids[idx]
-        fine_texts = " ".join(self.fine_annotations[video_id]['sentences'])
-        coarse_text = self.coarse_summaries[video_id]
-        inputs = self.tokenizer(
-            fine_texts,
+        fine_text = self.fine_annotations[idx]
+        coarse_text = self.coarse_summaries[idx]
+        inputs = self.tokenizer.encode_plus(
+            fine_text,
+            add_special_tokens=True,
             max_length=self.max_len,
-            padding='max_length',
-            truncation=True,
+            pad_to_max_length=True,
+            return_attention_mask=True,
             return_tensors="pt"
         )
-        labels = self.tokenizer(
+        labels = self.tokenizer.encode_plus(
             coarse_text,
+            add_special_tokens=True,
             max_length=self.max_len,
-            padding='max_length',
-            truncation=True,
+            pad_to_max_length=True,
+            return_attention_mask=False,
             return_tensors="pt"
-        ).input_ids
+        )
 
-        labels[labels == self.tokenizer.pad_token_id] = -100  # Ignore padding tokens in the loss computation
-
+        # Use only the first token of the label (which represents the whole sequence in sequence classification)
         return {
-            'input_ids': inputs.input_ids.flatten(),
-            'attention_mask': inputs.attention_mask.flatten(),
-            'labels': labels.flatten(),
+            'input_ids': inputs['input_ids'].flatten(),
+            'attention_mask': inputs['attention_mask'].flatten(),
+            'labels': labels['input_ids'].flatten()[0],  # Take the first token as the label
         }
 
 
