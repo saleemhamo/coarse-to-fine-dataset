@@ -28,32 +28,37 @@ class TACoSDataset(Dataset):
         return len(self.video_ids)
 
     def __getitem__(self, idx):
-        video_id = self.video_ids[idx]  # Use the video ID from the list
-        fine_text = " ".join(self.fine_annotations[video_id]['sentences'])  # Combine sentences if needed
-        coarse_text = self.coarse_summaries[video_id]  # Get the corresponding coarse summary
+        video_id = self.video_ids[idx]
+        fine_text = self.fine_annotations[video_id]['sentences']
+        coarse_text = self.coarse_summaries.get(video_id, "")
+
+        if not coarse_text:
+            logging.warning(f"No coarse summary found for video_id {video_id}")
 
         inputs = self.tokenizer.encode_plus(
             fine_text,
             add_special_tokens=True,
             max_length=self.max_len,
-            padding="max_length",
+            padding='max_length',
             return_attention_mask=True,
             return_tensors="pt"
         )
-
         labels = self.tokenizer.encode_plus(
             coarse_text,
             add_special_tokens=True,
             max_length=self.max_len,
-            padding="max_length",
+            padding='max_length',
             return_attention_mask=False,
             return_tensors="pt"
         )
 
+        if labels['input_ids'].size(1) == 0:
+            logging.error(f"Empty label for video_id {video_id}")
+
         return {
-            'input_ids': inputs['input_ids'].squeeze(),
-            'attention_mask': inputs['attention_mask'].squeeze(),
-            'labels': labels['input_ids'].squeeze()[0],  # Take the first token as the label
+            'input_ids': inputs['input_ids'].flatten(),
+            'attention_mask': inputs['attention_mask'].flatten(),
+            'labels': labels['input_ids'].flatten()[0]  # Take the first token as the label
         }
 
 
