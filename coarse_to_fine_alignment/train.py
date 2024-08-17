@@ -3,7 +3,7 @@ from transformers import BertTokenizer, BertForSequenceClassification
 from torch.utils.data import DataLoader
 from sklearn.model_selection import KFold
 import numpy as np
-from dataloaders.tacos_dataloader import TACoSDataset
+from dataloaders.tacos_dataloader import TACoSDataset, collate_fn
 
 
 # Function to calculate Recall@K
@@ -51,8 +51,8 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
     train_sampler = torch.utils.data.SubsetRandomSampler(train_idx)
     val_sampler = torch.utils.data.SubsetRandomSampler(val_idx)
 
-    train_dataloader = DataLoader(train_dataset, batch_size=16, sampler=train_sampler)
-    val_dataloader = DataLoader(train_dataset, batch_size=16, sampler=val_sampler)
+    train_dataloader = DataLoader(train_dataset, batch_size=16, sampler=train_sampler, collate_fn=collate_fn)
+    val_dataloader = DataLoader(train_dataset, batch_size=16, sampler=val_sampler, collate_fn=collate_fn)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
 

@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import Dataset
 from torch.nn.utils.rnn import pad_sequence
 
+
 class TACoSDataset(Dataset):
     def __init__(self, fine_annotations_path, coarse_summaries_path, tokenizer, max_len):
         self.fine_annotations = self.load_fine_annotations(fine_annotations_path)
@@ -57,12 +58,17 @@ class TACoSDataset(Dataset):
             'labels': labels['input_ids'].squeeze()[0],  # Take the first token as the label
         }
 
-# Custom collate function to handle the variable length sequences
+
+import torch
+from torch.nn.utils.rnn import pad_sequence
+
+
 def collate_fn(batch):
     input_ids = [item['input_ids'] for item in batch]
     attention_masks = [item['attention_mask'] for item in batch]
     labels = torch.stack([item['labels'] for item in batch])
 
+    # Pad sequences to the maximum length in the batch
     input_ids_padded = pad_sequence(input_ids, batch_first=True, padding_value=0)
     attention_masks_padded = pad_sequence(attention_masks, batch_first=True, padding_value=0)
 
