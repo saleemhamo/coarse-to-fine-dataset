@@ -41,7 +41,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
     train_dataloader = DataLoader(train_dataset, batch_size=16, sampler=train_sampler, collate_fn=collate_fn)
     val_dataloader = DataLoader(train_dataset, batch_size=16, sampler=val_sampler, collate_fn=collate_fn)
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-5)  # Lowered learning rate
 
     model.train()
     for epoch in range(3):  # Train for a few epochs
@@ -59,15 +59,19 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             coarse_outputs = model(input_ids=coarse_input_ids,
                                    attention_mask=(coarse_input_ids != tokenizer.pad_token_id).long())
 
-            logits = fine_outputs.logits
-            coarse_logits = coarse_outputs.logits
+            logits = fine_outputs.logits.view(-1, model.config.num_labels)
+            labels = coarse_logits.view(-1, model.config.num_labels)
 
             loss_fct = torch.nn.CrossEntropyLoss()
-            loss = loss_fct(logits.view(-1, model.config.num_labels), coarse_logits.view(-1, model.config.num_labels))
+            loss = loss_fct(logits, labels)
 
             logging.info(f"Training Loss: {loss.item()}")
 
             loss.backward()
+
+            # Gradient clipping
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+
             optimizer.step()
 
             similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
