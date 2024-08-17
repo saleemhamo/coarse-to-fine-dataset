@@ -1,3 +1,5 @@
+import os
+
 import logging
 import torch
 from sklearn.model_selection import KFold
@@ -17,6 +19,22 @@ model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_l
 train_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 kf = KFold(n_splits=5)
 
+# Directory where the model will be saved
+output_dir = 'output'
+
+# Create the directory if it does not exist
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+
+def recall_at_k(predictions, labels, k):
+    recall = 0
+    for i in range(len(labels)):
+        if labels[i] in predictions[i][:k]:
+            recall += 1
+    return recall / len(labels)
+
+
 for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
     logging.info(f"Starting Fold {fold + 1}")
 
@@ -30,6 +48,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
 
     model.train()
     for epoch in range(3):  # Train for a few epochs
+        logging.info(f"Epoch {epoch + 1}/{3}")
         for batch in train_dataloader:
             optimizer.zero_grad()
 
@@ -49,14 +68,22 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             loss_fct = torch.nn.CrossEntropyLoss()
             loss = loss_fct(logits.view(-1, model.config.num_labels), coarse_logits.view(-1, model.config.num_labels))
 
-            logging.info(f"Loss: {loss.item()}")
+            logging.info(f"Training Loss: {loss.item()}")
 
             loss.backward()
             optimizer.step()
 
+            # Log predictions and their similarity
+            similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
+            predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
+            logging.info(f"Top-5 Predictions: {predictions}")
+            logging.info(f"Ground Truth: {torch.arange(coarse_logits.size(0))}")
+
     # Validation logic
     model.eval()
     total_loss = 0
+    all_predictions = []
+    all_labels = []
     with torch.no_grad():
         for batch in val_dataloader:
             fine_input_ids = batch['input_ids'].to(device)
@@ -75,8 +102,20 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             loss = loss_fct(logits.view(-1, model.config.num_labels), coarse_logits.view(-1, model.config.num_labels))
             total_loss += loss.item()
 
+            # Calculate similarities and store predictions for metrics
+            similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
+            predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
+            all_predictions.extend(predictions.cpu().numpy())
+            all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())  # Ground truth positions
+
     avg_val_loss = total_loss / len(val_dataloader)
     logging.info(f"Fold {fold + 1} Validation Loss: {avg_val_loss}")
 
-torch.save(model.state_dict(), 'output/final_model.pth')
+    # Calculate Recall@1, Recall@5, and other metrics
+    recall_1 = recall_at_k(all_predictions, all_labels, k=1)
+    recall_5 = recall_at_k(all_predictions, all_labels, k=5)
+    logging.info(f"Fold {fold + 1} Recall@1: {recall_1}")
+    logging.info(f"Fold {fold + 1} Recall@5: {recall_5}")
+
+torch.save(model.state_dict(), os.path.join(output_dir, 'final_model.pth'))
 logging.info("Model training and saving completed.")
