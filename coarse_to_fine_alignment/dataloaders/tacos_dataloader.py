@@ -32,9 +32,12 @@ class TACoSDataset(Dataset):
         fine_text = self.fine_annotations[video_id]['sentences']
         coarse_text = self.coarse_summaries.get(video_id, "")
 
-        logging.info(f"video_id: {video_id}, coarse_text : {coarse_text}, fine_text: {fine_text}")
+        # Log the coarse_text content for debugging
         if not coarse_text:
-            logging.warning(f"No coarse summary found for video_id {video_id}")
+            logging.warning(f"No coarse summary found for video_id {video_id}. Using a default placeholder.")
+            coarse_text = "[UNK]"  # Default placeholder text
+
+        logging.debug(f"Coarse Text for video_id {video_id}: '{coarse_text}'")
 
         inputs = self.tokenizer.encode_plus(
             fine_text,
@@ -44,6 +47,7 @@ class TACoSDataset(Dataset):
             return_attention_mask=True,
             return_tensors="pt"
         )
+
         labels = self.tokenizer.encode_plus(
             coarse_text,
             add_special_tokens=True,
@@ -53,9 +57,12 @@ class TACoSDataset(Dataset):
             return_tensors="pt"
         )
 
-        print(f"labels.size {len(labels)}")
-        if labels['input_ids'].size(1) == 0:
-            logging.error(f"Empty label for video_id {video_id}")
+        # Log the size of the label tensor
+        logging.debug(f"Label tensor size for video_id {video_id}: {labels['input_ids'].size()}")
+
+        if labels['input_ids'].numel() == 0:
+            logging.error(f"Empty label tensor for video_id {video_id}, coarse_text: '{coarse_text}'")
+            return None  # Or handle the empty case appropriately
 
         return {
             'input_ids': inputs['input_ids'].flatten(),
@@ -80,7 +87,8 @@ def collate_fn(batch):
 
     # Log the shape of each sequence in the batch
     for i, (inp, lbl) in enumerate(zip(input_ids, labels)):
-        logging.debug(f"Sequence {i}: Input ID length = {inp.size()}, Label length = {lbl.size()}")
+        logging.debug(
+            f"Sequence {i}: Input ID size = {inp.size()}, Attention Mask size = {attention_mask[i].size()}, Label size = {lbl.size()}")
 
     # Check for any 0-d tensors (empty sequences)
     if any(seq.dim() == 0 for seq in input_ids) or any(seq.dim() == 0 for seq in labels):
@@ -88,11 +96,18 @@ def collate_fn(batch):
         raise ValueError("Found empty sequence in the batch.")
 
     # Pad sequences to the max length in this batch
+    max_len_input_ids = max([seq.size(0) for seq in input_ids])
+    max_len_labels = max([seq.size(0) for seq in labels])
+    logging.debug(f"Max length of input IDs in this batch: {max_len_input_ids}")
+    logging.debug(f"Max length of labels in this batch: {max_len_labels}")
+
     input_ids = torch.nn.utils.rnn.pad_sequence(input_ids, batch_first=True, padding_value=0)
     attention_mask = torch.nn.utils.rnn.pad_sequence(attention_mask, batch_first=True, padding_value=0)
     labels = torch.nn.utils.rnn.pad_sequence(labels, batch_first=True, padding_value=0)
 
-    logging.info("Collate function completed successfully.")
+    logging.info(
+        "Collate function completed successfully. Padded input size: {}, Padded label size: {}".format(input_ids.size(),
+                                                                                                       labels.size()))
 
     return {
         'input_ids': input_ids,
