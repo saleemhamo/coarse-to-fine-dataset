@@ -57,12 +57,16 @@ class TACoSDataset(Dataset):
             return_tensors="pt"
         )
 
+        logging.debug(f"Raw Label tensor: {labels['input_ids']}")
+
         # Log the size of the label tensor
         logging.debug(f"Label tensor size for video_id {video_id}: {labels['input_ids'].size()}")
 
         if labels['input_ids'].numel() == 0:
             logging.error(f"Empty label tensor for video_id {video_id}, coarse_text: '{coarse_text}'")
             return None  # Or handle the empty case appropriately
+
+        logging.debug(f"Labels tensor before flattening: {labels['input_ids']}")
 
         return {
             'input_ids': inputs['input_ids'].flatten(),
@@ -84,6 +88,10 @@ def collate_fn(batch):
     input_ids = [item['input_ids'] for item in batch]
     attention_mask = [item['attention_mask'] for item in batch]
     labels = [item['labels'] for item in batch]
+
+    # Log the raw data for inspection
+    for i, lbl in enumerate(labels):
+        logging.debug(f"Raw Label {i} tensor: {lbl}")
 
     # Log the shape of each sequence in the batch
     for i, (inp, lbl) in enumerate(zip(input_ids, labels)):
