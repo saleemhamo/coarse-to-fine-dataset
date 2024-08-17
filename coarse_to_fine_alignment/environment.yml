@@ -1,0 +1,14 @@
+name: coarse_to_fine_alignment
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip
+  - pytorch
+  - torchvision
+  - cudatoolkit=11.3  # If you have a CUDA-compatible GPU, otherwise remove this line
+  - pip:
+      - transformers
+      - scikit-learn
+      - tqdm
