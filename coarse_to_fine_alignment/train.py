@@ -1,5 +1,4 @@
 import os
-
 import logging
 import torch
 from sklearn.model_selection import KFold
@@ -19,10 +18,8 @@ model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_l
 train_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 kf = KFold(n_splits=5)
 
-# Directory where the model will be saved
 output_dir = 'output'
 
-# Create the directory if it does not exist
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -73,13 +70,16 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             loss.backward()
             optimizer.step()
 
-            # Log predictions and their similarity
             similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
             predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
-            logging.info(f"Top-5 Predictions: {predictions}")
-            logging.info(f"Ground Truth: {torch.arange(coarse_logits.size(0))}")
 
-    # Validation logic
+            decoded_predictions = [tokenizer.decode(pred, skip_special_tokens=True) for pred in predictions]
+            decoded_labels = [tokenizer.decode(coarse_input_ids[i], skip_special_tokens=True) for i in
+                              range(coarse_logits.size(0))]
+
+            logging.info(f"Top-5 Predictions: {decoded_predictions}")
+            logging.info(f"Ground Truth: {decoded_labels}")
+
     model.eval()
     total_loss = 0
     all_predictions = []
@@ -102,16 +102,21 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             loss = loss_fct(logits.view(-1, model.config.num_labels), coarse_logits.view(-1, model.config.num_labels))
             total_loss += loss.item()
 
-            # Calculate similarities and store predictions for metrics
             similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
             predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
             all_predictions.extend(predictions.cpu().numpy())
             all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())  # Ground truth positions
 
+            decoded_predictions = [tokenizer.decode(pred, skip_special_tokens=True) for pred in predictions]
+            decoded_labels = [tokenizer.decode(coarse_input_ids[i], skip_special_tokens=True) for i in
+                              range(coarse_logits.size(0))]
+
+            logging.info(f"Validation Predictions: {decoded_predictions}")
+            logging.info(f"Validation Ground Truth: {decoded_labels}")
+
     avg_val_loss = total_loss / len(val_dataloader)
     logging.info(f"Fold {fold + 1} Validation Loss: {avg_val_loss}")
 
-    # Calculate Recall@1, Recall@5, and other metrics
     recall_1 = recall_at_k(all_predictions, all_labels, k=1)
     recall_5 = recall_at_k(all_predictions, all_labels, k=5)
     logging.info(f"Fold {fold + 1} Recall@1: {recall_1}")
