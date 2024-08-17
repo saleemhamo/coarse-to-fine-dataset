@@ -1,7 +1,8 @@
 import json
 import os
+import torch
 from torch.utils.data import Dataset
-
+from torch.nn.utils.rnn import pad_sequence
 
 class TACoSDataset(Dataset):
     def __init__(self, fine_annotations_path, coarse_summaries_path, tokenizer, max_len):
@@ -9,7 +10,7 @@ class TACoSDataset(Dataset):
         self.coarse_summaries = self.load_coarse_summaries(coarse_summaries_path)
         self.tokenizer = tokenizer
         self.max_len = max_len
-        self.video_ids = list(self.fine_annotations.keys())  # List of video IDs
+        self.video_ids = list(self.fine_annotations.keys())
 
     def load_fine_annotations(self, file_path):
         with open(file_path, 'r') as f:
@@ -51,7 +52,22 @@ class TACoSDataset(Dataset):
         )
 
         return {
-            'input_ids': inputs['input_ids'].flatten(),
-            'attention_mask': inputs['attention_mask'].flatten(),
-            'labels': labels['input_ids'].flatten()[0],  # Take the first token as the label
+            'input_ids': inputs['input_ids'].squeeze(),
+            'attention_mask': inputs['attention_mask'].squeeze(),
+            'labels': labels['input_ids'].squeeze()[0],  # Take the first token as the label
         }
+
+# Custom collate function to handle the variable length sequences
+def collate_fn(batch):
+    input_ids = [item['input_ids'] for item in batch]
+    attention_masks = [item['attention_mask'] for item in batch]
+    labels = torch.stack([item['labels'] for item in batch])
+
+    input_ids_padded = pad_sequence(input_ids, batch_first=True, padding_value=0)
+    attention_masks_padded = pad_sequence(attention_masks, batch_first=True, padding_value=0)
+
+    return {
+        'input_ids': input_ids_padded,
+        'attention_mask': attention_masks_padded,
+        'labels': labels
+    }
