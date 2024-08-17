@@ -59,11 +59,11 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             coarse_outputs = model(input_ids=coarse_input_ids,
                                    attention_mask=(coarse_input_ids != tokenizer.pad_token_id).long())
 
-            logits = fine_outputs.logits.view(-1, model.config.num_labels)
-            labels = coarse_logits.view(-1, model.config.num_labels)
+            fine_logits = fine_outputs.logits.view(-1, model.config.num_labels)
+            coarse_logits = coarse_outputs.logits.view(-1, model.config.num_labels)
 
             loss_fct = torch.nn.CrossEntropyLoss()
-            loss = loss_fct(logits, labels)
+            loss = loss_fct(fine_logits, coarse_logits)
 
             logging.info(f"Training Loss: {loss.item()}")
 
@@ -74,7 +74,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
 
             optimizer.step()
 
-            similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
+            similarities = torch.matmul(fine_logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
             predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
 
             decoded_predictions = [tokenizer.decode(pred, skip_special_tokens=True) for pred in predictions]
@@ -100,13 +100,13 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             coarse_outputs = model(input_ids=coarse_input_ids,
                                    attention_mask=(coarse_input_ids != tokenizer.pad_token_id).long())
 
-            logits = fine_outputs.logits
-            coarse_logits = coarse_outputs.logits
+            fine_logits = fine_outputs.logits.view(-1, model.config.num_labels)
+            coarse_logits = coarse_outputs.logits.view(-1, model.config.num_labels)
 
-            loss = loss_fct(logits.view(-1, model.config.num_labels), coarse_logits.view(-1, model.config.num_labels))
+            loss = loss_fct(fine_logits, coarse_logits)
             total_loss += loss.item()
 
-            similarities = torch.matmul(logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
+            similarities = torch.matmul(fine_logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
             predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
             all_predictions.extend(predictions.cpu().numpy())
             all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())  # Ground truth positions
