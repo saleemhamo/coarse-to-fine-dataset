@@ -3,7 +3,7 @@ from transformers import BertTokenizer, BertForSequenceClassification
 from torch.utils.data import DataLoader
 from sklearn.model_selection import KFold
 import numpy as np
-from coarse_to_fine_alignment.dataloaders.tacos_dataloader import TACoSDataset
+from dataloaders.tacos_dataloader import TACoSDataset
 
 
 # Function to calculate Recall@K
