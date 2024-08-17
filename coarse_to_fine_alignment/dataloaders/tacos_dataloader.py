@@ -32,6 +32,7 @@ class TACoSDataset(Dataset):
         fine_text = self.fine_annotations[video_id]['sentences']
         coarse_text = self.coarse_summaries.get(video_id, "")
 
+        logging.info(f"video_id: {video_id}, coarse_text : {coarse_text}, fine_text: {fine_text}")
         if not coarse_text:
             logging.warning(f"No coarse summary found for video_id {video_id}")
 
