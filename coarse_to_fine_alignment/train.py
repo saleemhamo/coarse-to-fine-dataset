@@ -1,9 +1,10 @@
 import os
 import logging
 import torch
-from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader
 from transformers import BertTokenizer, BertForSequenceClassification
+from sklearn.model_selection import KFold
+from torch.nn import CosineSimilarity
 
 from dataloaders.tacos_dataloader import TACoSDataset, collate_fn
 
@@ -13,13 +14,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=tokenizer.vocab_size).to(device)
+model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2).to(device)
 
 train_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 kf = KFold(n_splits=5)
 
 output_dir = 'output'
-
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -41,10 +41,11 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
     train_dataloader = DataLoader(train_dataset, batch_size=16, sampler=train_sampler, collate_fn=collate_fn)
     val_dataloader = DataLoader(train_dataset, batch_size=16, sampler=val_sampler, collate_fn=collate_fn)
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-5)  # Lowered learning rate
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-5)
+    cosine_similarity = CosineSimilarity(dim=1)
 
     model.train()
-    for epoch in range(3):  # Train for a few epochs
+    for epoch in range(3):
         logging.info(f"Epoch {epoch + 1}/{3}")
         for batch in train_dataloader:
             optimizer.zero_grad()
@@ -52,37 +53,22 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             fine_input_ids = batch['input_ids'].to(device)
             fine_attention_mask = batch['attention_mask'].to(device)
             coarse_input_ids = batch['labels'].to(device)
-
             coarse_input_ids = coarse_input_ids.squeeze(1)
 
             fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask)
             coarse_outputs = model(input_ids=coarse_input_ids,
                                    attention_mask=(coarse_input_ids != tokenizer.pad_token_id).long())
 
-            fine_logits = fine_outputs.logits.view(-1, model.config.num_labels)
-            coarse_logits = coarse_outputs.logits.view(-1, model.config.num_labels)
+            fine_logits = fine_outputs.logits
+            coarse_logits = coarse_outputs.logits
 
-            loss_fct = torch.nn.CrossEntropyLoss()
-            loss = loss_fct(fine_logits, coarse_logits)
+            loss = -cosine_similarity(fine_logits, coarse_logits).mean()  # Contrastive loss
 
             logging.info(f"Training Loss: {loss.item()}")
 
             loss.backward()
-
-            # Gradient clipping
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-
             optimizer.step()
-
-            similarities = torch.matmul(fine_logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
-            predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
-
-            decoded_predictions = [tokenizer.decode(pred, skip_special_tokens=True) for pred in predictions]
-            decoded_labels = [tokenizer.decode(coarse_input_ids[i], skip_special_tokens=True) for i in
-                              range(coarse_logits.size(0))]
-
-            logging.info(f"Top-5 Predictions: {decoded_predictions}")
-            logging.info(f"Ground Truth: {decoded_labels}")
 
     model.eval()
     total_loss = 0
@@ -93,23 +79,22 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             fine_input_ids = batch['input_ids'].to(device)
             fine_attention_mask = batch['attention_mask'].to(device)
             coarse_input_ids = batch['labels'].to(device)
-
             coarse_input_ids = coarse_input_ids.squeeze(1)
 
             fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask)
             coarse_outputs = model(input_ids=coarse_input_ids,
                                    attention_mask=(coarse_input_ids != tokenizer.pad_token_id).long())
 
-            fine_logits = fine_outputs.logits.view(-1, model.config.num_labels)
-            coarse_logits = coarse_outputs.logits.view(-1, model.config.num_labels)
+            fine_logits = fine_outputs.logits
+            coarse_logits = coarse_outputs.logits
 
-            loss = loss_fct(fine_logits, coarse_logits)
+            loss = -cosine_similarity(fine_logits, coarse_logits).mean()
             total_loss += loss.item()
 
             similarities = torch.matmul(fine_logits, coarse_logits.transpose(0, 1))  # [batch_size, batch_size]
-            predictions = torch.topk(similarities, k=5, dim=1).indices  # Get top-5 predictions
+            predictions = torch.topk(similarities, k=5, dim=1).indices
             all_predictions.extend(predictions.cpu().numpy())
-            all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())  # Ground truth positions
+            all_labels.extend(torch.arange(coarse_logits.size(0)).cpu().numpy())
 
             decoded_predictions = [tokenizer.decode(pred, skip_special_tokens=True) for pred in predictions]
             decoded_labels = [tokenizer.decode(coarse_input_ids[i], skip_special_tokens=True) for i in
