@@ -49,7 +49,6 @@ def build_dataloader(opt, vocab=None):
         "charades-cg": CharadesCGDataset,
         "charades-cd": CharadesCDDataset,
         "tacos": TACoSDataset,
-        "TACoSCoarseGrained": TACoSDataset,
         "qvhighlights": QVHighlightsDataset,
     }
     dataset_config = dict(
@@ -146,6 +145,8 @@ def build_dataloader(opt, vocab=None):
         val_loaders = None
         test_loaders = {}
 
+        print(f"val_splits: {val_splits}")
+        print(f"opt.dataset_name: {opt.dataset_name}")
         for split in val_splits:
             test_dataset = name2dataset[opt.dataset_name](
                 **dataset_config, recfw=False, split=split
