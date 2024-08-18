@@ -32,7 +32,7 @@ class CLIPStochastic(nn.Module):
                 text_features = self.clip.get_text_features(**text_data)
                 video_features = self.clip.get_image_features(video_data)
 
-                print(f"[TRAIN] Video features shape before reshape: {video_features.shape}")
+                # print(f"[TRAIN] Video features shape before reshape: {video_features.shape}")
                 video_features = video_features.reshape(batch_size, self.config.num_frames, -1)
                 video_features_pooled = self.pool_frames(text_features, video_features)
 
@@ -47,7 +47,7 @@ class CLIPStochastic(nn.Module):
                 text_features = self.clip.get_text_features(**text_data)
                 video_features = self.clip.get_image_features(video_data)
 
-                print(f"[EVAL] Video features shape before reshape: {video_features.shape}")
+                # print(f"[EVAL] Video features shape before reshape: {video_features.shape}")
                 video_features = video_features.reshape(batch_size, self.config.num_frames, -1)
                 video_features_pooled = self.pool_frames(text_features, video_features)
 

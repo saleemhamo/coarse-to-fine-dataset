@@ -154,9 +154,6 @@ class Trainer(BaseTrainer):
                                                                                             return_all_frames=True,
                                                                                             is_train=False)
 
-                print(f"Text embedding shape: {text_embed.shape}")
-                print(f"Video embedding shape: {vid_embed.shape}")
-
                 text_embed_arr.append(text_embed.cpu())
                 vid_embed_arr.append(vid_embed.cpu())
 
