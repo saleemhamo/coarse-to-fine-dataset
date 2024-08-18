@@ -133,41 +133,40 @@ def fine_grained_eval(model, eval_loader, opt):
 
     return metrics
 
+def compute_combined_metrics(coarse_grained_results, fine_grained_results):
+    combined_metrics = {}
 
-def compute_unified_metrics(coarse_grained_results, fine_grained_results):
-    # Ensure that the results are dictionaries
-    if not isinstance(coarse_grained_results, dict) or not isinstance(fine_grained_results, dict):
-        raise ValueError("Expected coarse_grained_results and fine_grained_results to be dictionaries.")
+    # Extract necessary data from fine-grained results
+    fine_spans = np.array(fine_grained_results['spans'])
+    fine_scores = np.array(fine_grained_results['scores'])
 
-    unified_metrics = {}
+    # Compute IoU between fine-grained spans (as a form of alignment verification)
+    iou = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
 
-    # Combine R1 with IoU mean
-    if 'R1' in coarse_grained_results and 'spans' in fine_grained_results:
-        fine_spans = np.array(fine_grained_results['spans'])
-        iou_tuple = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
-        iou = iou_tuple[0] if isinstance(iou_tuple, tuple) else iou_tuple
-        unified_metrics['R1_combined'] = (coarse_grained_results['R1'] + iou.mean()) / 2
+    # Flatten fine-grained scores for mAP calculation
+    fine_scores_flat = fine_scores.flatten()
 
-    # Combine R5 with mAP
-    if 'R5' in coarse_grained_results and 'scores' in fine_grained_results:
-        fine_scores = np.array(fine_grained_results['scores']).flatten()
-        map_score = interpolated_precision_recall(fine_scores, fine_scores)
-        unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score) / 2
+    # Calculate mAP score
+    map_score = interpolated_precision_recall(fine_scores_flat, fine_scores_flat)
 
-    # Combine R10 with IoU mean
-    if 'R10' in coarse_grained_results:
-        unified_metrics['R10_combined'] = (coarse_grained_results['R10'] + iou.mean()) / 2
+    # Combine R@K metrics from the coarse-grained stage with the mAP from the fine-grained stage
+    combined_metrics['R1_combined'] = (coarse_grained_results['R1'] + map_score) / 2
+    combined_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score) / 2
+    combined_metrics['R10_combined'] = (coarse_grained_results['R10'] + map_score) / 2
+    combined_metrics['R50_combined'] = (coarse_grained_results['R50'] + map_score) / 2
+    combined_metrics['R100_combined'] = (coarse_grained_results['R100'] + map_score) / 2
 
-    # Combine R50 with IoU mean
-    if 'R50' in coarse_grained_results:
-        unified_metrics['R50_combined'] = (coarse_grained_results['R50'] + iou.mean()) / 2
+    # Additional Metrics
+    combined_metrics['Mean_IoU'] = np.mean(iou)  # Mean IoU across all fine-grained spans
+    combined_metrics['Median_IoU'] = np.median(iou)  # Median IoU
+    combined_metrics['Max_IoU'] = np.max(iou)  # Max IoU
 
-    # Combine R100 with IoU mean
-    if 'R100' in coarse_grained_results:
-        unified_metrics['R100_combined'] = (coarse_grained_results['R100'] + iou.mean()) / 2
+    # Displaying the combined metrics
+    print("\n--- Combined Metrics ---")
+    for key, value in combined_metrics.items():
+        print(f"{key}: {value:.4f}")
 
-    return unified_metrics
-
+    return combined_metrics
 
 def print_metrics(metrics):
     for key, value in metrics.items():
