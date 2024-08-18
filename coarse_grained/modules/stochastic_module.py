@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from config.base_config import Config
+from coarse_grained.config.base_config import Config
 
 
 class LinearCosRadius(nn.Module):

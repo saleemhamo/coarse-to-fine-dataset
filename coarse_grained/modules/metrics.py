@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import scipy.stats
-from config.all_config import gen_log
+from coarse_grained.config.all_config import gen_log
 import gc
 
 def np_softmax(X, theta = 1.0, axis = None):

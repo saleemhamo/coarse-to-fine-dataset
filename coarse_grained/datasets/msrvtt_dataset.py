@@ -2,10 +2,10 @@ import os
 import numpy as np
 import pandas as pd
 from collections import defaultdict
-from modules.basic_utils import load_json
+from coarse_grained.modules.basic_utils import load_json
 from torch.utils.data import Dataset
-from config.base_config import Config
-from datasets.video_capture import VideoCapture
+from coarse_grained.config.base_config import Config
+from coarse_grained.datasets.video_capture import VideoCapture
 
 
 class MSRVTTDataset(Dataset):

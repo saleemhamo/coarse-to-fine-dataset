@@ -1,7 +1,7 @@
 import os
 import argparse
-from config.base_config import Config
-from modules.basic_utils import mkdirp, deletedir
+from base_config import Config
+from coarse_grained.modules.basic_utils import mkdirp, deletedir
 
 import time
 import numpy as np

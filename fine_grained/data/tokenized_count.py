@@ -3,7 +3,7 @@ import csv
 import string
 import pickle
 from tqdm import tqdm
-from dataset import CLIPTokenizer, Vocabulary
+from fine_grained.dataset import CLIPTokenizer, Vocabulary
 
 
 def word_tokenize(text):

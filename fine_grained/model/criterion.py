@@ -2,8 +2,8 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from utils import generalized_temporal_iou, span_cxw_to_xx
-from utils import accuracy
+from fine_grained.utils import generalized_temporal_iou, span_cxw_to_xx
+from fine_grained.utils import accuracy
 
 
 class Criterion(nn.Module):

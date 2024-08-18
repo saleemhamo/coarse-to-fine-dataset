@@ -7,8 +7,8 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 from torch import nn
 import torch.nn.functional as F
-from utils import span_xx_to_cxw, span_cxw_to_xx
-from utils import generalized_temporal_iou
+from fine_grained.utils import span_xx_to_cxw, span_cxw_to_xx
+from fine_grained.utils import generalized_temporal_iou
 
 
 class HungarianMatcher(nn.Module):

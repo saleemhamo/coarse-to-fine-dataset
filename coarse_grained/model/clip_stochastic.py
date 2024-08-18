@@ -1,7 +1,7 @@
 import torch.nn as nn
-from config.base_config import Config
-from modules.transformer import Transformer
-from modules.stochastic_module import StochasticText
+from coarse_grained.config.base_config import Config
+from coarse_grained.modules.transformer import Transformer
+from coarse_grained.modules.stochastic_module import StochasticText
 
 
 class CLIPStochastic(nn.Module):

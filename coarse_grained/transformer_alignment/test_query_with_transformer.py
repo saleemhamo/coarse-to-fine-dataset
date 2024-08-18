@@ -2,11 +2,11 @@ import os
 import torch
 import pickle
 from transformers import CLIPTokenizer
-from model.model_factory import ModelFactory
-from datasets.msrvtt_dataset import MSRVTTDataset
+from coarse_grained.model.model_factory import ModelFactory
+from coarse_grained.datasets.msrvtt_dataset import MSRVTTDataset
 from torch.utils.data import DataLoader
-from config.all_config import AllConfig
-from datasets.model_transforms import init_transform_dict
+from coarse_grained.config.all_config import AllConfig
+from coarse_grained.datasets.model_transforms import init_transform_dict
 from stochastic_text_wrapper import StochasticTextWrapper
 
 def load_model(config):

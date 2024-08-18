@@ -1,5 +1,5 @@
 import torch.nn as nn
-from modules.stochastic_module import StochasticText
+from coarse_grained.modules.stochastic_module import StochasticText
 from transformer_alignment import TransformerAlignment
 
 

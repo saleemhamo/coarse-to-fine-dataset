@@ -7,8 +7,8 @@ import torch.nn.functional as F
 from torch import nn
 import numpy as np
 
-from utils import split_and_pad, split_expand_and_pad
-from utils import sample_outclass_neg, sample_inclass_neg, inverse_sigmoid
+from fine_grained.utils import split_and_pad, split_expand_and_pad
+from fine_grained.utils import sample_outclass_neg, sample_inclass_neg, inverse_sigmoid
 from .transformer import T2V_TransformerEncoderLayer, T2V_TransformerEncoder
 from .text_encoder import CLIPTextEncoder, GloveTextEncoder
 

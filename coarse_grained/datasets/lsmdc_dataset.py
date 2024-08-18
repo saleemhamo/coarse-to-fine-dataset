@@ -1,7 +1,7 @@
 import os
 from torch.utils.data import Dataset
-from config.base_config import Config
-from datasets.video_capture import VideoCapture
+from coarse_grained.config.base_config import Config
+from coarse_grained.datasets.video_capture import VideoCapture
 
 
 class LSMDCDataset(Dataset):
