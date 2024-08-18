@@ -140,34 +140,33 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
     print("Type of fine_grained_results:", type(fine_grained_results))
     # print("Content of fine_grained_results:", fine_grained_results)
 
-    # Ensure that the results are lists
-    if not isinstance(coarse_grained_results, list) or not isinstance(fine_grained_results, list):
-        raise ValueError("Expected coarse_grained_results and fine_grained_results to be lists of dictionaries.")
+    # Ensure that the results are dictionaries
+    if not isinstance(coarse_grained_results, dict) or not isinstance(fine_grained_results, dict):
+        raise ValueError("Expected coarse_grained_results and fine_grained_results to be dictionaries.")
 
     unified_metrics = {}
-    combined_results = zip(coarse_grained_results, fine_grained_results)
+    for key in coarse_grained_results:
+        if key in fine_grained_results:
+            coarse_result = coarse_grained_results[key]
+            fine_result = fine_grained_results[key]
 
-    for coarse_result, fine_result in combined_results:
-        # Debug: Print the type and content of each result
-        print("Coarse result type:", type(coarse_result))
-        # print("Coarse result content:", coarse_result)
-        print("Fine result type:", type(fine_result))
-        # print("Fine result content:", fine_result)
+            # Debug: Print the type and content of each result
+            print("Processing key:", key)
+            print("Coarse result content:", coarse_result)
+            print("Fine result content:", fine_result)
 
-        # Ensure that each result is a dictionary
-        if not isinstance(coarse_result, dict) or not isinstance(fine_result, dict):
-            raise ValueError("Each result in coarse_grained_results and fine_grained_results must be a dictionary.")
+            # Ensure that 'spans' is in both results
+            if 'spans' not in coarse_result or 'spans' not in fine_result:
+                raise KeyError(f"'spans' key not found in results for key: {key}")
 
-        # Ensure that 'spans' is in both dictionaries
-        if 'spans' not in coarse_result or 'spans' not in fine_result:
-            raise KeyError("'spans' key not found in coarse_result or fine_result.")
+            # Calculate IoU and mAP
+            iou = compute_temporal_iou_batch_cross(coarse_result['spans'], fine_result['spans'])
+            map_score = interpolated_precision_recall(coarse_result['scores'], fine_result['scores'])
 
-        # Calculate IoU and mAP
-        iou = compute_temporal_iou_batch_cross(coarse_result['spans'], fine_result['spans'])
-        map_score = interpolated_precision_recall(coarse_result['scores'], fine_result['scores'])
-
-        unified_metrics['iou'] = iou.mean()
-        unified_metrics['mAP'] = map_score.mean()
+            unified_metrics[key] = {
+                'iou': iou.mean(),
+                'mAP': map_score.mean()
+            }
 
     return unified_metrics
 
