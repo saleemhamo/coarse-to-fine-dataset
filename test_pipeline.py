@@ -151,48 +151,34 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
     if 'R1' in coarse_grained_results and 'spans' in fine_grained_results:
         fine_spans = np.array(fine_grained_results['spans'])
 
-        # Debug: Log the shape and a snippet of the fine spans
         print(f"Shape of fine_spans: {fine_spans.shape}")
         print(f"Sample fine_spans: {fine_spans[:2]}")  # Print first 2 elements
 
-        # Compute IoU between fine-grained spans (this assumes fine_spans are in the correct format)
         iou_tuple = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
-
-        # Assuming IoU is returned as a tuple, extract the relevant part
         iou = iou_tuple[0] if isinstance(iou_tuple, tuple) else iou_tuple
 
-        # Debug: Log the shape and a snippet of the IoU results
         print(f"Shape of IoU: {iou.shape if hasattr(iou, 'shape') else 'Not an array'}")
         print(f"Sample IoU values: {iou[:2]}")  # Print first 2 elements if array
 
-        # Combine R1 and IoU as a placeholder logic
         unified_metrics['R1_combined'] = (coarse_grained_results['R1'] + iou.mean()) / 2
 
     # Example of combining R@5 from coarse-grained and mAP from fine-grained scores
     if 'R5' in coarse_grained_results and 'scores' in fine_grained_results:
         fine_scores = np.array(fine_grained_results['scores'])
 
-        # Debug: Log the shape and a snippet of the fine scores
         print(f"Shape of fine_scores: {fine_scores.shape}")
         print(f"Sample fine_scores: {fine_scores[:2]}")  # Print first 2 elements
 
-        # Reshape fine_scores to ensure it has the correct number of dimensions
-        if fine_scores.ndim == 1:
-            print("Reshaping fine_scores to 2D")
-            fine_scores = fine_scores.reshape(-1, 1)
+        # Flatten fine_scores to 1D if needed
+        fine_scores_flattened = fine_scores.flatten()
+        print(f"Shape of fine_scores after flattening: {fine_scores_flattened.shape}")
+        print(f"Sample fine_scores after flattening: {fine_scores_flattened[:10]}")
 
-        # Debug: Log the shape and a snippet after reshaping
-        print(f"Shape of fine_scores after reshaping: {fine_scores.shape}")
-        print(f"Sample fine_scores after reshaping: {fine_scores[:2]}")
+        map_score = interpolated_precision_recall(fine_scores_flattened, fine_scores_flattened)
 
-        # Compute mAP based on fine-grained scores (this assumes fine_scores are in the correct format)
-        map_score = interpolated_precision_recall(fine_scores, fine_scores)
-
-        # Debug: Log the shape and a snippet of the mAP results
         print(f"Shape of mAP: {map_score.shape if hasattr(map_score, 'shape') else 'Not an array'}")
         print(f"Sample mAP values: {map_score[:2]}")  # Print first 2 elements if array
 
-        # Combine R5 and mAP as a placeholder logic
         unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
 
     return unified_metrics
