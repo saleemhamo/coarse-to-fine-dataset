@@ -29,18 +29,19 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # Step 1: Coarse-Grained Evaluation
-    coarse_grained_config = AllConfig()
-    coarse_grained_results = evaluate_coarse_grained(coarse_grained_config)
+    # # Step 1: Coarse-Grained Evaluation
+    # coarse_grained_config = AllConfig()
+    # coarse_grained_results = evaluate_coarse_grained(coarse_grained_config)
+    coarse_grained_results = None
 
     # Step 2: Fine-Grained Evaluation
     fine_grained_results = evaluate_fine_grained(coarse_grained_results)
 
     # Step 3: Compute Unified Metric
-    unified_metrics = compute_unified_metrics(coarse_grained_results, fine_grained_results)
+    # unified_metrics = compute_unified_metrics(coarse_grained_results, fine_grained_results)
 
     # Step 4: Print Metrics
-    print_metrics(unified_metrics)
+    # print_metrics(unified_metrics)
 
 
 def evaluate_coarse_grained(config):
@@ -87,7 +88,7 @@ def evaluate_coarse_grained(config):
     return coarse_grained_results
 
 
-def evaluate_fine_grained(coarse_grained_results):
+def evaluate_fine_grained(coarse_grained_results=None):
     opt = TestOptions().parse()
     vocab = build_vocab(opt) if opt.tokenizer_type in ["GloVeSimple", "GloVeNLTK"] else None
     _, _, test_loader = build_dataloader(opt, vocab)
