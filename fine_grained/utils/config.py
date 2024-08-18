@@ -157,8 +157,6 @@ class BaseOptions(object):
         parser.add_argument("--max_before_nms", type=int, default=10)
         parser.add_argument("--max_after_nms", type=int, default=10)
 
-        parser.add_argument("--max_after_nms", type=int, default=10)
-
         # Workaround coarse_graines params
         parser.add_argument("--datetime", type = str, default = None) 
         parser.add_argument("--arch", type = str, default = None) 
