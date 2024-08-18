@@ -48,6 +48,7 @@ def build_dataloader(opt, vocab=None):
         "charades-cg": CharadesCGDataset,
         "charades-cd": CharadesCDDataset,
         "tacos": TACoSDataset,
+        "TACoSCoarseGrained": TACoSDataset,
         "qvhighlights": QVHighlightsDataset,
     }
     dataset_config = dict(
@@ -74,7 +75,7 @@ def build_dataloader(opt, vocab=None):
         # val_splits = ["test_trivial"]
     elif opt.dataset_name == "charades-cd":
         val_splits = ["test_ood"]
-    elif opt.dataset_name == "tacos":
+    elif opt.dataset_name == "tacos" or opt.dataset_name == "TACoSCoarseGrained":
         val_splits = ["test"]
     elif opt.dataset_name == "qvhighlights":
         val_splits = ["val"]
