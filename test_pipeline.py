@@ -117,11 +117,7 @@ def fine_grained_eval(model, eval_loader, opt):
     model.eval()
     metrics = defaultdict(list)
 
-    print(f"eval_loader: {eval_loader}")
-    print(f"tqdm(eval_loader): {tqdm(eval_loader, desc='Evaluating Fine-Grained Stage')}")
-
     for batch in tqdm(eval_loader, desc="Evaluating Fine-Grained Stage"):
-        print(f"batch: {batch}")
         prepare_batch_input(batch, opt.device, non_blocking=opt.pin_memory)
         outputs = model(**batch, dataset_name=opt.dataset_name, is_training=False)
         prob = torch.softmax(outputs["pred_logits"], -1)
@@ -138,8 +134,8 @@ def fine_grained_eval(model, eval_loader, opt):
 
 
 def compute_unified_metrics(coarse_grained_results, fine_grained_results):
-    print(f"coarse_grained_results: {coarse_grained_results}")
-    print(f"fine_grained_results: {fine_grained_results}")
+    print(f"coarse_grained_results: {coarse_grained_results is None}")
+    print(f"fine_grained_results: {fine_grained_results is None}")
 
     # Combine coarse-grained and fine-grained results for unified evaluation
     unified_metrics = {}
