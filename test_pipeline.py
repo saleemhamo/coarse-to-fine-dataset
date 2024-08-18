@@ -134,18 +134,30 @@ def fine_grained_eval(model, eval_loader, opt):
 
 
 def compute_unified_metrics(coarse_grained_results, fine_grained_results):
-    print(f"coarse_grained_results: {coarse_grained_results}")
-    print(f"fine_grained_results: {fine_grained_results}")
+    # Ensure that the results are dictionaries
+    if not isinstance(coarse_grained_results, list) or not isinstance(fine_grained_results, list):
+        raise ValueError("Expected coarse_grained_results and fine_grained_results to be lists of dictionaries.")
 
-    # Combine coarse-grained and fine-grained results for unified evaluation
     unified_metrics = {}
     combined_results = zip(coarse_grained_results, fine_grained_results)
 
-    # Implement a custom metric that integrates both stages' outputs
-    # Example: Use IoU and mAP as part of a unified metric
     for coarse_result, fine_result in combined_results:
+        # Debug: Print the type of the results
+        print(f"Coarse result type: {type(coarse_result)}")
+        print(f"Fine result type: {type(fine_result)}")
+
+        # Ensure that each result is a dictionary
+        if not isinstance(coarse_result, dict) or not isinstance(fine_result, dict):
+            raise ValueError("Each result in coarse_grained_results and fine_grained_results must be a dictionary.")
+
+        # Ensure that 'spans' is in both dictionaries
+        if 'spans' not in coarse_result or 'spans' not in fine_result:
+            raise KeyError("'spans' key not found in coarse_result or fine_result.")
+
+        # Calculate IoU and mAP
         iou = compute_temporal_iou_batch_cross(coarse_result['spans'], fine_result['spans'])
         map_score = interpolated_precision_recall(coarse_result['scores'], fine_result['scores'])
+
         unified_metrics['iou'] = iou.mean()
         unified_metrics['mAP'] = map_score.mean()
 
