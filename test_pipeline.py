@@ -134,7 +134,13 @@ def fine_grained_eval(model, eval_loader, opt):
 
 
 def compute_unified_metrics(coarse_grained_results, fine_grained_results):
-    # Ensure that the results are dictionaries
+    # Log the type and content of the results before processing
+    print("Type of coarse_grained_results:", type(coarse_grained_results))
+    print("Content of coarse_grained_results:", coarse_grained_results)
+    print("Type of fine_grained_results:", type(fine_grained_results))
+    print("Content of fine_grained_results:", fine_grained_results)
+
+    # Ensure that the results are lists
     if not isinstance(coarse_grained_results, list) or not isinstance(fine_grained_results, list):
         raise ValueError("Expected coarse_grained_results and fine_grained_results to be lists of dictionaries.")
 
@@ -142,9 +148,11 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
     combined_results = zip(coarse_grained_results, fine_grained_results)
 
     for coarse_result, fine_result in combined_results:
-        # Debug: Print the type of the results
-        print(f"Coarse result type: {type(coarse_result)}")
-        print(f"Fine result type: {type(fine_result)}")
+        # Debug: Print the type and content of each result
+        print("Coarse result type:", type(coarse_result))
+        print("Coarse result content:", coarse_result)
+        print("Fine result type:", type(fine_result))
+        print("Fine result content:", fine_result)
 
         # Ensure that each result is a dictionary
         if not isinstance(coarse_result, dict) or not isinstance(fine_result, dict):
