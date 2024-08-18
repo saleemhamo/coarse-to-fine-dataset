@@ -108,6 +108,8 @@ class AllConfig(Config):
         parser.add_argument('--stochastic_prior', type=str, default='uniform01', choices=['uniform01', 'normal'], help="use which prior for the re-parameterization, default to unifrom01")
         parser.add_argument('--stochastic_prior_std',  type=float, default=1.0, help='std value for the reprameterization prior')
 
+        parser.add_argument('--config_file',  type=str, default=None, help='fine grained config')
+
         args = parser.parse_args()
 
         # @WJM: use day-time for args.exp_name

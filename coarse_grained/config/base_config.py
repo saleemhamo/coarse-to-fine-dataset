@@ -59,6 +59,7 @@ class Config(ABC):
         self.DSL = args.DSL
         self.stochastic_prior = args.stochastic_prior
         self.stochastic_prior_std = args.stochastic_prior_std
+        self.config_file = args.config_file
 
     @abstractmethod
     def parse_args(self):
