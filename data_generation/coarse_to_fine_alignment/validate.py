@@ -43,7 +43,7 @@ model.load_state_dict(torch.load('output/final_model.pth'))
 model.eval()
 
 # Load the validation/test dataset
-test_dataset = TACoSDataset('data/tacos/tacos.json', 'data/tacos/tacos_cg.json', tokenizer, max_len=128)
+test_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 
 # Validate the model
