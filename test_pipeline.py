@@ -150,9 +150,9 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
     for coarse_result, fine_result in combined_results:
         # Debug: Print the type and content of each result
         print("Coarse result type:", type(coarse_result))
-        print("Coarse result content:", coarse_result)
+        # print("Coarse result content:", coarse_result)
         print("Fine result type:", type(fine_result))
-        print("Fine result content:", fine_result)
+        # print("Fine result content:", fine_result)
 
         # Ensure that each result is a dictionary
         if not isinstance(coarse_result, dict) or not isinstance(fine_result, dict):
