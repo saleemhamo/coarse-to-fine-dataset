@@ -502,7 +502,6 @@ def inference():
         vocab = None
 
     _, _, test_loaders = build_dataloader(opt, vocab)
-    print(f"test_loaders: {test_loaders}")
     assert len(test_loaders) == 1
     for split in test_loaders.keys():
         test_loader = test_loaders[split]
