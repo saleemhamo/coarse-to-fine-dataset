@@ -13,8 +13,13 @@ logging.basicConfig(filename='training.log', level=logging.INFO, format='%(ascti
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# Load the tokenizer and add a padding token
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})  # Add padding token
+
+# Load the GPT-2 model
 model = GPT2Model.from_pretrained("gpt2").to(device)
+model.resize_token_embeddings(len(tokenizer))  # Adjust model embeddings for new tokens
 
 train_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 kf = KFold(n_splits=5)
@@ -53,6 +58,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             fine_input_ids = batch['input_ids'].to(device)
             fine_attention_mask = batch['attention_mask'].to(device)
             coarse_input_ids = batch['labels'].to(device)
+            coarse_input_ids = coarse_input_ids.squeeze(1)
 
             fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask)
 
