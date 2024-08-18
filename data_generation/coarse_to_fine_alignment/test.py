@@ -18,7 +18,7 @@ model.to(device)
 model.eval()
 
 # Load your dataset
-test_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
+test_dataset = TACoSDataset('data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 test_dataloader = DataLoader(test_dataset, batch_size=16, collate_fn=collate_fn)
 
 

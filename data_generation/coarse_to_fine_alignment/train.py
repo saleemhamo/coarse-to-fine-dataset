@@ -17,7 +17,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2).to(device)
 
-train_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
+train_dataset = TACoSDataset('data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 kf = KFold(n_splits=5)
 
 output_dir = 'output'

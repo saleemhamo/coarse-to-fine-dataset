@@ -63,4 +63,8 @@ dependencies:
 - idna=3.7
 - urllib3=2.2.2
 - certifi=2024.7.4
-name: ctf_env
+- ujson=5.10.0
+- pip
+- pip:
+  - opencv-python==4.6.0.66
+name: merged_env
