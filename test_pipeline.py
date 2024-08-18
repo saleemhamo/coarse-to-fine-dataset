@@ -176,10 +176,14 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
 
         map_score = interpolated_precision_recall(fine_scores_flattened, fine_scores_flattened)
 
-        print(f"Shape of mAP: {map_score.shape if hasattr(map_score, 'shape') else 'Not an array'}")
-        print(f"Sample mAP values: {map_score[:2]}")  # Print first 2 elements if array
-
-        unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
+        # Check if map_score is a scalar
+        if np.isscalar(map_score):
+            print(f"mAP score: {map_score}")
+            unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score) / 2
+        else:
+            print(f"Shape of mAP: {map_score.shape}")
+            print(f"Sample mAP values: {map_score[:2]}")  # Print first 2 elements if array
+            unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
 
     return unified_metrics
 
