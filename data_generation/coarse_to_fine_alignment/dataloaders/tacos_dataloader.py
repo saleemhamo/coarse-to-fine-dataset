@@ -24,10 +24,9 @@ class TACoSDataset(Dataset):
             summaries = {}
             for item in data:
                 video_id = item['video_id']
-                if video_id in summaries:
-                    summaries[video_id].append(item['summarized_sentence'])
-                else:
-                    summaries[video_id] = [item['summarized_sentence']]
+                if video_id not in summaries:
+                    summaries[video_id] = []
+                summaries[video_id].append(item['summarized_sentence'])
             return summaries
 
     def __len__(self):
@@ -47,18 +46,26 @@ class TACoSDataset(Dataset):
             return_tensors="pt"
         )
 
-        labels = [self.tokenizer.encode(
-            coarse_text,
-            add_special_tokens=True,
-            max_length=self.max_len,
-            padding='max_length',
-            return_tensors="pt"
-        ).squeeze(0) for coarse_text in coarse_texts]
+        labels = []
+        for coarse_text in coarse_texts:
+            label = self.tokenizer.encode_plus(
+                coarse_text,
+                add_special_tokens=True,
+                max_length=self.max_len,
+                padding='max_length',
+                return_attention_mask=False,
+                return_tensors="pt"
+            )
+            labels.append(label['input_ids'].flatten())
+
+        if not labels:
+            logging.error(f"No coarse summaries found for video_id {video_id}")
+            labels.append(torch.tensor([self.tokenizer.cls_token_id] * self.max_len))
 
         return {
             'input_ids': inputs['input_ids'].flatten(),
             'attention_mask': inputs['attention_mask'].flatten(),
-            'labels': torch.stack(labels)
+            'labels': torch.stack(labels)  # Stack labels to handle multiple coarse summaries
         }
 
 
@@ -71,7 +78,18 @@ def collate_fn(batch):
 
     input_ids = torch.nn.utils.rnn.pad_sequence(input_ids, batch_first=True, padding_value=0)
     attention_mask = torch.nn.utils.rnn.pad_sequence(attention_mask, batch_first=True, padding_value=0)
-    labels = torch.nn.utils.rnn.pad_sequence(labels, batch_first=True, padding_value=0)
+
+    # If there are multiple coarse summaries for a video, we need to pad these as well
+    max_label_len = max([label.size(1) for label in labels])
+    padded_labels = []
+    for label in labels:
+        if label.size(1) < max_label_len:
+            padding = torch.full((label.size(0), max_label_len - label.size(1)), fill_value=0)
+            padded_labels.append(torch.cat((label, padding), dim=1))
+        else:
+            padded_labels.append(label)
+
+    labels = torch.stack(padded_labels)
 
     return {
         'input_ids': input_ids,
