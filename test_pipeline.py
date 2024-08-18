@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from transformers import CLIPTokenizer
 from tqdm import tqdm
 from collections import defaultdict, OrderedDict
+import numpy as np
 
 # Imports from your existing codebase
 from coarse_grained.config.all_config import AllConfig
@@ -146,21 +147,27 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
 
     unified_metrics = {}
 
-    # Example of combining R@1 from coarse-grained and some relevant fine-grained metric
+    # Example of combining R@1 from coarse-grained and IoU from fine-grained spans
     if 'R1' in coarse_grained_results and 'spans' in fine_grained_results:
-        # Assuming some aggregation logic between coarse-grained R1 and fine-grained spans
-        # This is just an example to show how you could combine these metrics meaningfully
-        iou = compute_temporal_iou_batch_cross(fine_grained_results['spans'], fine_grained_results['spans'])  # Placeholder
+        fine_spans = np.array(fine_grained_results['spans'])
+
+        # Compute IoU between fine-grained spans (this assumes fine_spans are in the correct format)
+        iou = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
+
+        # Combine R1 and IoU as a placeholder logic
         unified_metrics['R1_combined'] = (coarse_grained_results['R1'] + iou.mean()) / 2
 
-    # Similarly, combine other metrics as needed
-    # Example:
+    # Example of combining R@5 from coarse-grained and mAP from fine-grained scores
     if 'R5' in coarse_grained_results and 'scores' in fine_grained_results:
-        map_score = interpolated_precision_recall(fine_grained_results['scores'], fine_grained_results['scores'])  # Placeholder
+        fine_scores = np.array(fine_grained_results['scores'])
+
+        # Compute mAP based on fine-grained scores (this assumes fine_scores are in the correct format)
+        map_score = interpolated_precision_recall(fine_scores, fine_scores)
+
+        # Combine R5 and mAP as a placeholder logic
         unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
 
     return unified_metrics
-
 
 def print_metrics(metrics):
     for key, value in metrics.items():
