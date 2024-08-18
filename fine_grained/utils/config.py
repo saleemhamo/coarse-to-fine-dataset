@@ -164,7 +164,7 @@ class BaseOptions(object):
         parser.add_argument("--batch_size", type = str, default = None) 
         parser.add_argument("--noclip_lr", type = str, default = None) 
         parser.add_argument("--transformer_dropout", type = str, default = None) 
-        parser.add_argument("--dataset_name", type = str, default = None) 
+        # parser.add_argument("--dataset_name", type = str, default = None)
         parser.add_argument("--stochasic_trials", type = str, default = None)
         parser.add_argument("--gpu", type = str, default = None)
         parser.add_argument("--load_epoch", type = str, default = None)
