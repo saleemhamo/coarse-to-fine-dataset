@@ -145,28 +145,19 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
         raise ValueError("Expected coarse_grained_results and fine_grained_results to be dictionaries.")
 
     unified_metrics = {}
-    for key in coarse_grained_results:
-        if key in fine_grained_results:
-            coarse_result = coarse_grained_results[key]
-            fine_result = fine_grained_results[key]
 
-            # Debug: Print the type and content of each result
-            print("Processing key:", key)
-            print("Coarse result content:", coarse_result)
-            print("Fine result content:", fine_result)
+    # Example of combining R@1 from coarse-grained and some relevant fine-grained metric
+    if 'R1' in coarse_grained_results and 'spans' in fine_grained_results:
+        # Assuming some aggregation logic between coarse-grained R1 and fine-grained spans
+        # This is just an example to show how you could combine these metrics meaningfully
+        iou = compute_temporal_iou_batch_cross(fine_grained_results['spans'], fine_grained_results['spans'])  # Placeholder
+        unified_metrics['R1_combined'] = (coarse_grained_results['R1'] + iou.mean()) / 2
 
-            # Ensure that 'spans' is in both results
-            if 'spans' not in coarse_result or 'spans' not in fine_result:
-                raise KeyError(f"'spans' key not found in results for key: {key}")
-
-            # Calculate IoU and mAP
-            iou = compute_temporal_iou_batch_cross(coarse_result['spans'], fine_result['spans'])
-            map_score = interpolated_precision_recall(coarse_result['scores'], fine_result['scores'])
-
-            unified_metrics[key] = {
-                'iou': iou.mean(),
-                'mAP': map_score.mean()
-            }
+    # Similarly, combine other metrics as needed
+    # Example:
+    if 'R5' in coarse_grained_results and 'scores' in fine_grained_results:
+        map_score = interpolated_precision_recall(fine_grained_results['scores'], fine_grained_results['scores'])  # Placeholder
+        unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
 
     return unified_metrics
 
