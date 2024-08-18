@@ -7,6 +7,7 @@ import argparse
 
 from .func_utils import mkdirp, load_json, save_json, make_zipfile, dict_to_markdown
 
+
 # gwork, share_MLP, num_recfw_layers, rec_fw_contra,
 # rec_ss, num_recss_layers, recfw_margin
 # loss_svd_coef, loss_recss_coef, recss_tau, visualization
@@ -31,7 +32,8 @@ class BaseOptions(object):
 
         ## dataset
         parser.add_argument("--dataset_name", type=str,
-                            choices=['charades', 'charades-cg', 'charades-cd', 'qvhighlights', 'tacos', 'TACoSCoarseGrained'])
+                            choices=['charades', 'charades-cg', 'charades-cd', 'qvhighlights', 'tacos',
+                                     'TACoSCoarseGrained'])
         parser.add_argument("--ann_path", type=str)
         parser.add_argument("--feat_files", type=str, nargs="+",
                             help="video feature dirs. If more than one, will concat their features. "
@@ -158,18 +160,17 @@ class BaseOptions(object):
         parser.add_argument("--max_after_nms", type=int, default=10)
 
         # Workaround coarse_graines params
-        parser.add_argument("--datetime", type = str, default = None) 
-        parser.add_argument("--arch", type = str, default = None) 
-        parser.add_argument("--videos_dir", type = str, default = None) 
-        parser.add_argument("--batch_size", type = str, default = None) 
-        parser.add_argument("--noclip_lr", type = str, default = None) 
-        parser.add_argument("--transformer_dropout", type = str, default = None) 
+        parser.add_argument("--datetime", type=str, default=None)
+        parser.add_argument("--arch", type=str, default=None)
+        parser.add_argument("--videos_dir", type=str, default=None)
+        parser.add_argument("--noclip_lr", type=str, default=None)
+        parser.add_argument("--transformer_dropout", type=str, default=None)
         # parser.add_argument("--dataset_name", type = str, default = None)
-        parser.add_argument("--stochasic_trials", type = str, default = None)
-        parser.add_argument("--gpu", type = str, default = None)
-        parser.add_argument("--load_epoch", type = str, default = None)
-        parser.add_argument("--exp_name", type = str, default = None) 
-        parser.add_argument("--output_dir", type = str, default = None)
+        parser.add_argument("--stochasic_trials", type=str, default=None)
+        parser.add_argument("--gpu", type=str, default=None)
+        parser.add_argument("--load_epoch", type=str, default=None)
+        parser.add_argument("--exp_name", type=str, default=None)
+        parser.add_argument("--output_dir", type=str, default=None)
         self.parser = parser
 
     def load_config(self, opt):
@@ -220,7 +221,7 @@ class BaseOptions(object):
             opt.is_inference = False
             if opt.exp_id is None:
                 raise ValueError("--exp_id is required for at a training option!")
-            
+
             if opt.eval_batch_size == -1:
                 opt.eval_batch_size = opt.batch_size
 
@@ -270,4 +271,3 @@ class TestOptions(BaseOptions):
                                  help="dir to save results, if not set, fall back to training results_dir")
         self.parser.add_argument("--trained_result_dir", type=str,
                                  help="dir contains the model file, will be converted to absolute path afterwards")
-
