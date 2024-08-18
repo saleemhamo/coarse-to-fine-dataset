@@ -1,6 +1,6 @@
 import os
 import argparse
-from base_config import Config
+from coarse_grained.config.base_config import Config
 from coarse_grained.modules.basic_utils import mkdirp, deletedir
 
 import time
