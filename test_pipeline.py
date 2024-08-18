@@ -135,55 +135,36 @@ def fine_grained_eval(model, eval_loader, opt):
 
 
 def compute_unified_metrics(coarse_grained_results, fine_grained_results):
-    # Log the type and content of the results before processing
-    print("Type of coarse_grained_results:", type(coarse_grained_results))
-    print("keys of Content of coarse_grained_results:", list(coarse_grained_results.keys()))
-    print("Type of fine_grained_results:", type(fine_grained_results))
-    print("keys of Content of fine_grained_results:", list(fine_grained_results.keys()))
-
     # Ensure that the results are dictionaries
     if not isinstance(coarse_grained_results, dict) or not isinstance(fine_grained_results, dict):
         raise ValueError("Expected coarse_grained_results and fine_grained_results to be dictionaries.")
 
     unified_metrics = {}
 
-    # Example of combining R@1 from coarse-grained and IoU from fine-grained spans
+    # Combine R1 with IoU mean
     if 'R1' in coarse_grained_results and 'spans' in fine_grained_results:
         fine_spans = np.array(fine_grained_results['spans'])
-
-        print(f"Shape of fine_spans: {fine_spans.shape}")
-        print(f"Sample fine_spans: {fine_spans[:2]}")  # Print first 2 elements
-
         iou_tuple = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
         iou = iou_tuple[0] if isinstance(iou_tuple, tuple) else iou_tuple
-
-        print(f"Shape of IoU: {iou.shape if hasattr(iou, 'shape') else 'Not an array'}")
-        print(f"Sample IoU values: {iou[:2]}")  # Print first 2 elements if array
-
         unified_metrics['R1_combined'] = (coarse_grained_results['R1'] + iou.mean()) / 2
 
-    # Example of combining R@5 from coarse-grained and mAP from fine-grained scores
+    # Combine R5 with mAP
     if 'R5' in coarse_grained_results and 'scores' in fine_grained_results:
-        fine_scores = np.array(fine_grained_results['scores'])
+        fine_scores = np.array(fine_grained_results['scores']).flatten()
+        map_score = interpolated_precision_recall(fine_scores, fine_scores)
+        unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score) / 2
 
-        print(f"Shape of fine_scores: {fine_scores.shape}")
-        print(f"Sample fine_scores: {fine_scores[:2]}")  # Print first 2 elements
+    # Combine R10 with IoU mean
+    if 'R10' in coarse_grained_results:
+        unified_metrics['R10_combined'] = (coarse_grained_results['R10'] + iou.mean()) / 2
 
-        # Flatten fine_scores to 1D if needed
-        fine_scores_flattened = fine_scores.flatten()
-        print(f"Shape of fine_scores after flattening: {fine_scores_flattened.shape}")
-        print(f"Sample fine_scores after flattening: {fine_scores_flattened[:10]}")
+    # Combine R50 with IoU mean
+    if 'R50' in coarse_grained_results:
+        unified_metrics['R50_combined'] = (coarse_grained_results['R50'] + iou.mean()) / 2
 
-        map_score = interpolated_precision_recall(fine_scores_flattened, fine_scores_flattened)
-
-        # Check if map_score is a scalar
-        if np.isscalar(map_score):
-            print(f"mAP score: {map_score}")
-            unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score) / 2
-        else:
-            print(f"Shape of mAP: {map_score.shape}")
-            print(f"Sample mAP values: {map_score[:2]}")  # Print first 2 elements if array
-            unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
+    # Combine R100 with IoU mean
+    if 'R100' in coarse_grained_results:
+        unified_metrics['R100_combined'] = (coarse_grained_results['R100'] + iou.mean()) / 2
 
     return unified_metrics
 
