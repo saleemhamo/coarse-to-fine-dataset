@@ -31,7 +31,7 @@ class BaseOptions(object):
         
         ## dataset
         parser.add_argument("--dataset_name", type=str,
-                            choices=['charades', 'charades-cg', 'charades-cd', 'qvhighlights', 'tacos'])
+                            choices=['charades', 'charades-cg', 'charades-cd', 'qvhighlights', 'tacos', 'TACoSCoarseGrained'])
         parser.add_argument("--ann_path", type=str)
         parser.add_argument("--feat_files", type=str, nargs="+",
                             help="video feature dirs. If more than one, will concat their features. "
