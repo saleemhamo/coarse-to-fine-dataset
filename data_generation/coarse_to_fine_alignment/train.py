@@ -15,11 +15,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load the tokenizer and add a padding token
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})  # Add padding token
 
 # Load the GPT-2 model
 model = GPT2Model.from_pretrained("gpt2").to(device)
-model.resize_token_embeddings(len(tokenizer))
+model.resize_token_embeddings(len(tokenizer))  # Adjust model embeddings for new tokens
 
 train_dataset = TACoSDataset('./data/tacos/tacos.json', './data/tacos/tacos_cg.json', tokenizer, max_len=128)
 kf = KFold(n_splits=5)
@@ -58,28 +58,25 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             fine_input_ids = batch['input_ids'].to(device)
             fine_attention_mask = batch['attention_mask'].to(device)
             coarse_input_ids = batch['labels'].to(device)
+            coarse_input_ids = coarse_input_ids.squeeze(1)
 
-            fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask).last_hidden_state.mean(
-                dim=1)
-            total_loss = 0
+            fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask)
 
-            # Iterate through each coarse-grained data point
-            for coarse_input in coarse_input_ids:
-                coarse_input = coarse_input.unsqueeze(0)  # Add batch dimension
-                coarse_output = model(input_ids=coarse_input.to(device)).last_hidden_state.mean(dim=1)
+            batch_loss = 0
+            for coarse_batch in coarse_input_ids:
+                coarse_outputs = model(input_ids=coarse_batch.to(device))
+                loss = -cosine_similarity(fine_outputs.last_hidden_state.mean(dim=1),
+                                          coarse_outputs.last_hidden_state.mean(dim=1)).mean()
+                batch_loss += loss.item()
 
-                loss = -cosine_similarity(fine_outputs, coarse_output).mean()
-                total_loss += loss
+            logging.info(f"Training Loss: {batch_loss / coarse_input_ids.size(1)}")
 
-            total_loss = total_loss / coarse_input_ids.size(0)
-            logging.info(f"Training Loss: {total_loss.item()}")
-
-            total_loss.backward()
+            loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
 
     model.eval()
-    total_val_loss = 0
+    total_loss = 0
     all_predictions = []
     all_labels = []
     with torch.no_grad():
@@ -88,29 +85,29 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(train_dataset)):
             fine_attention_mask = batch['attention_mask'].to(device)
             coarse_input_ids = batch['labels'].to(device)
 
-            fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask).last_hidden_state.mean(
-                dim=1)
+            fine_outputs = model(input_ids=fine_input_ids, attention_mask=fine_attention_mask)
 
-            for coarse_input in coarse_input_ids:
-                coarse_input = coarse_input.unsqueeze(0)  # Add batch dimension
-                coarse_output = model(input_ids=coarse_input.to(device)).last_hidden_state.mean(dim=1)
+            for coarse_batch in coarse_input_ids:
+                coarse_outputs = model(input_ids=coarse_batch.to(device))
 
-                loss = -cosine_similarity(fine_outputs, coarse_output).mean()
-                total_val_loss += loss.item()
+                loss = -cosine_similarity(fine_outputs.last_hidden_state.mean(dim=1),
+                                          coarse_outputs.last_hidden_state.mean(dim=1)).mean()
+                total_loss += loss.item()
 
-                similarities = torch.matmul(fine_outputs, coarse_output.transpose(0, 1))  # [batch_size, batch_size]
+                similarities = torch.matmul(fine_outputs.last_hidden_state.mean(dim=1),
+                                            coarse_outputs.last_hidden_state.mean(dim=1).transpose(0, 1))
                 predictions = torch.topk(similarities, k=5, dim=1).indices
                 all_predictions.extend(predictions.cpu().numpy())
-                all_labels.extend(torch.arange(coarse_output.size(0)).cpu().numpy())
+                all_labels.extend(torch.arange(coarse_batch.size(0)).cpu().numpy())
 
                 decoded_predictions = [tokenizer.decode(pred, skip_special_tokens=True) for pred in predictions]
-                decoded_labels = [tokenizer.decode(coarse_input[i], skip_special_tokens=True) for i in
-                                  range(coarse_output.size(0))]
+                decoded_labels = [tokenizer.decode(coarse_batch[i], skip_special_tokens=True) for i in
+                                  range(coarse_batch.size(0))]
 
                 logging.info(f"Validation Predictions: {decoded_predictions}")
                 logging.info(f"Validation Ground Truth: {decoded_labels}")
 
-    avg_val_loss = total_val_loss / len(val_dataloader)
+    avg_val_loss = total_loss / len(val_dataloader)
     logging.info(f"Fold {fold + 1} Validation Loss: {avg_val_loss}")
 
     recall_1 = recall_at_k(all_predictions, all_labels, k=1)
