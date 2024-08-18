@@ -231,7 +231,7 @@ def eval_submission(submission, ground_truth, verbose=True, match_number=True, d
 
 
 def eval_moment_retrieval(submission, ground_truth, verbose=True, dataset_name="charades"):
-    if dataset_name in ["tacos"]:
+    if dataset_name in ["tacos", "TACoSCoarseGrained"]:
         length_ranges = [[0, 10], [10, 30], [30, 150], [150, 600], [0, 600], ]  #
         range_names = ["short", "middle", "long", "superlong", "full"]
         max_length = 600
@@ -251,7 +251,7 @@ def eval_moment_retrieval(submission, ground_truth, verbose=True, dataset_name="
             continue
         else:
             iou_thd2average_precision = compute_mr_ap(_submission, _ground_truth, num_workers=8, chunksize=50)
-        if dataset_name in ["tacos"]:
+        if dataset_name in ["tacos", "TACoSCoarseGrained"]:
             iou_thds = np.array([0.1, 0.3, 0.5, 0.7])
         else:
             iou_thds = np.concatenate([np.array([0.3]), np.linspace(0.5, 0.95, 10)])

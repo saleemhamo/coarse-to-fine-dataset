@@ -182,7 +182,7 @@ class MESM(nn.Module):
             enhanced_video_feat = projed_video_feat
 
         if self.rec_ss:
-            if kwargs['dataset_name'] in ["charades", "charades-cg", "charades-cd", "tacos"]:
+            if kwargs['dataset_name'] in ["charades", "charades-cg", "charades-cd", "tacos", "TACoSCoarseGrained"]:
                 batched_vid = video_feat
                 # batched_vid = enhanced_video_feat
                 batched_vid_mask = video_mask
