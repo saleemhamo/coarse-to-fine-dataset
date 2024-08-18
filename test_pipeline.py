@@ -92,6 +92,9 @@ def evaluate_fine_grained(coarse_grained_results=None):
     opt = TestOptions().parse()
     vocab = build_vocab(opt) if opt.tokenizer_type in ["GloVeSimple", "GloVeNLTK"] else None
     _, _, test_loader = build_dataloader(opt, vocab)
+    for split in test_loader.keys():
+        test_loader = test_loader[split]
+        break
     model = build_model(opt, vocab)
 
     logger.info(f"Load checkpoint from {opt.resume}")
