@@ -152,7 +152,10 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
         fine_spans = np.array(fine_grained_results['spans'])
 
         # Compute IoU between fine-grained spans (this assumes fine_spans are in the correct format)
-        iou = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
+        iou_tuple = compute_temporal_iou_batch_cross(fine_spans, fine_spans)
+
+        # Assuming IoU is returned as a tuple, extract the relevant part
+        iou = iou_tuple[0] if isinstance(iou_tuple, tuple) else iou_tuple
 
         # Combine R1 and IoU as a placeholder logic
         unified_metrics['R1_combined'] = (coarse_grained_results['R1'] + iou.mean()) / 2
@@ -168,6 +171,7 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
         unified_metrics['R5_combined'] = (coarse_grained_results['R5'] + map_score.mean()) / 2
 
     return unified_metrics
+
 
 def print_metrics(metrics):
     for key, value in metrics.items():
