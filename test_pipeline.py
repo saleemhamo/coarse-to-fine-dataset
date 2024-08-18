@@ -136,9 +136,9 @@ def fine_grained_eval(model, eval_loader, opt):
 def compute_unified_metrics(coarse_grained_results, fine_grained_results):
     # Log the type and content of the results before processing
     print("Type of coarse_grained_results:", type(coarse_grained_results))
-    # print("Content of coarse_grained_results:", coarse_grained_results)
+    print("Content of coarse_grained_results:", coarse_grained_results)
     print("Type of fine_grained_results:", type(fine_grained_results))
-    # print("Content of fine_grained_results:", fine_grained_results)
+    print("Content of fine_grained_results:", fine_grained_results)
 
     # Ensure that the results are dictionaries
     if not isinstance(coarse_grained_results, dict) or not isinstance(fine_grained_results, dict):
