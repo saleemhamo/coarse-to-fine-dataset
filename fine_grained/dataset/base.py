@@ -356,6 +356,7 @@ def collate(batch):
 
 
 def prepare_batch_input(batched_data, device, non_blocking=False):
+    print(f"batched_data: {batched_data}")
     for key, value in batched_data.items():
         if key == "words_weight":
             continue
