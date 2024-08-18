@@ -53,7 +53,7 @@ class BaseTrainer:
                     self._save_checkpoint(epoch, save_best=False)
 
     def validate(self):
-        self._valid_epoch_step(0,0,0)
+        return self._valid_epoch_step(0,0,0)
 
     def _prepare_device(self):
         """

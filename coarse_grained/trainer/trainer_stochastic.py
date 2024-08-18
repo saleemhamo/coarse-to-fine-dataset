@@ -91,14 +91,14 @@ class Trainer(BaseTrainer):
 
             if batch_idx % self.log_step == 0:
                 msg = (
-                'Train Epoch: {} dl: {}/{} Total Loss: {:.6f}, Original Loss: {:.6f}, Support Loss: {:.6f}'.format(
-                    epoch,
-                    batch_idx,
-                    num_steps - 1,
-                    loss_all.detach().item(),
-                    loss.detach().item(),
-                    loss_support.detach().item(),
-                ))
+                    'Train Epoch: {} dl: {}/{} Total Loss: {:.6f}, Original Loss: {:.6f}, Support Loss: {:.6f}'.format(
+                        epoch,
+                        batch_idx,
+                        num_steps - 1,
+                        loss_all.detach().item(),
+                        loss.detach().item(),
+                        loss_support.detach().item(),
+                    ))
                 gen_log(model_path=self.config.model_path, log_name='log_trntst', msg=msg)
 
             if batch_idx in eval_steps:
@@ -136,7 +136,6 @@ class Trainer(BaseTrainer):
         all_vid_ids = []
 
         with torch.no_grad():
-            # Check if the validation loader has data
             print(f"Number of batches in validation: {len(self.valid_data_loader)}")
 
             for idx, data in tqdm(enumerate(self.valid_data_loader)):
@@ -151,20 +150,19 @@ class Trainer(BaseTrainer):
 
                 data['video'] = data['video'].to(self.device)
 
-                # Ensure the model is returning valid embeddings
-                text_embed, vid_embed, vid_embed_pooled, text_embed_stochastic = self.model(data, return_all_frames=True, is_train=False)
+                text_embed, vid_embed, vid_embed_pooled, text_embed_stochastic = self.model(data,
+                                                                                            return_all_frames=True,
+                                                                                            is_train=False)
 
                 print(f"Text embedding shape: {text_embed.shape}")
                 print(f"Video embedding shape: {vid_embed.shape}")
 
-                # Append embeddings to lists
                 text_embed_arr.append(text_embed.cpu())
                 vid_embed_arr.append(vid_embed.cpu())
 
                 for v_id in data['video_id']:
                     all_vid_ids.append(v_id)
 
-            # Check if embeddings were successfully collected
             if len(text_embed_arr) == 0:
                 print("No text embeddings were collected during validation.")
                 raise RuntimeError("No text embeddings to concatenate.")
@@ -176,7 +174,6 @@ class Trainer(BaseTrainer):
             text_embeds = torch.cat(text_embed_arr)
             vid_embeds = torch.cat(vid_embed_arr)
 
-            # Since we have all pairs, remove duplicate videos when there's multiple captions per video
             vid_embeds_per_video_id = {}
             for idx, v_id in enumerate(all_vid_ids):
                 if v_id not in vid_embeds_per_video_id:
@@ -184,47 +181,34 @@ class Trainer(BaseTrainer):
 
             vid_embeds = torch.stack([vid_embeds_per_video_id[v_id] for v_id in vid_embeds_per_video_id])
 
-            # Pool frames for inference once we have all texts and videos
             self.model.pool_frames.cpu()
             vid_embeds_pooled = self.model.pool_frames(text_embeds, vid_embeds)
             self.model.pool_frames.cuda()
 
-            # build stochastic text embeds #########################################
             self.model.stochastic.cpu()
             start_selection_time = time.time()
 
-            # initialize text_embeds_stochastic_allpairs: to avoid data leakage, break vid-txt dependence by dataloader
             text_embeds_stochastic_allpairs = torch.zeros(
-                size=(vid_embeds.shape[0], text_embeds.shape[0], text_embeds.shape[1]))
+                size=(vid_embeds.shape[0], text_embeds.shape[0], text_embeds.shape[1])
+            )
 
-            # @WJM: the principle is to use the query video to process text
-            # sequential process to save memory:
             for (idx_vid, single_vid), single_vid_embed_pooled in tqdm(zip(enumerate(vid_embeds), vid_embeds_pooled)):
-
                 single_vid_vec = single_vid.unsqueeze(0)
-                # repeat as the same size of all texts
-                single_vid_repeat = single_vid_vec.tile((text_embeds.shape[0], 1, 1))  # [bs_t, #F, dim]
+                single_vid_repeat = single_vid_vec.tile((text_embeds.shape[0], 1, 1))
 
                 all_text_embed_stochstic = []
                 for trial in range(self.config.stochasic_trials):
-                    all_text_embed_stochastic, _, _ = self.model.stochastic(text_embeds,
-                                                                            single_vid_repeat)  # [bs_t, dim]
+                    all_text_embed_stochastic, _, _ = self.model.stochastic(text_embeds, single_vid_repeat)
                     all_text_embed_stochstic.append(all_text_embed_stochastic)
-                all_text_embed_stochstic_arr = torch.stack(all_text_embed_stochstic, dim=0)  # [#trials, bs_t, dim]
+                all_text_embed_stochstic_arr = torch.stack(all_text_embed_stochstic, dim=0)
 
-                # normalization before compute cos-sim
                 all_text_embed_stochstic_arr = all_text_embed_stochstic_arr / all_text_embed_stochstic_arr.norm(dim=-1,
                                                                                                                 keepdim=True)
                 single_vid_embed_pooled = single_vid_embed_pooled / single_vid_embed_pooled.norm(dim=-1, keepdim=True)
 
-                # compute cos-sim
-                sim_select = torch.sum(torch.mul(all_text_embed_stochstic_arr, single_vid_embed_pooled),
-                                       dim=-1)  # [#trial, bs_t]
+                sim_select = torch.sum(torch.mul(all_text_embed_stochstic_arr, single_vid_embed_pooled), dim=-1)
+                max_indices = torch.argmax(sim_select, dim=0)
 
-                # find max cos, take idx
-                max_indices = torch.argmax(sim_select, dim=0)  # [bs_t]
-
-                # select based on the idx
                 selected_plane = torch.ones(
                     (all_text_embed_stochstic_arr.shape[1], all_text_embed_stochstic_arr.shape[2]))
                 for i in range(all_text_embed_stochstic_arr.shape[1]):
@@ -232,25 +216,20 @@ class Trainer(BaseTrainer):
                 text_embeds_stochastic_allpairs[idx_vid, :, :] = selected_plane
 
             end_selection_time = time.time()
-            msg = (
-                f'To compute all stochastic-text embeddings for the whole dataset, the time usage is {end_selection_time - start_selection_time}\n')
+            msg = f'To compute all stochastic-text embeddings for the whole dataset, the time usage is {end_selection_time - start_selection_time}\n'
             gen_log(model_path=self.config.model_path, log_name='log_trntst', msg=msg)
             self.model.stochastic.cuda()
-            # finish build stochastic text embeds #########################################
 
-            # @WJM: rm unnecessary tensor to release memory
             del text_embeds, vid_embeds
             gc.collect()
 
             text_embeds_per_video_id, vid_embeds_pooled_per_video_id = generate_embeds_per_video_id_stochastic(
-                text_embeds_stochastic_allpairs,
-                vid_embeds_pooled, all_vid_ids, self.pooling_type)
+                text_embeds_stochastic_allpairs, vid_embeds_pooled, all_vid_ids, self.pooling_type
+            )
 
-            # @WJM: rm unnecessary tensor to release memory
             del text_embeds_stochastic_allpairs, vid_embeds_pooled
             gc.collect()
 
-            # @WJM: can use light implementation to avoid memory OOM:
             if self.config.save_memory_mode:
                 start_sims = time.time()
                 gen_log(model_path=self.config.model_path, log_name='log_trntst',
@@ -261,35 +240,32 @@ class Trainer(BaseTrainer):
                 end_sims = time.time()
                 gen_log(model_path=self.config.model_path, log_name='log_trntst',
                         msg=f'batch size split = {self.config.batch_size_split}, sims compute time={end_sims - start_sims}')
-
             else:
                 sims = sim_matrix_inference_stochastic(text_embeds_per_video_id, vid_embeds_pooled_per_video_id,
                                                        self.pooling_type)
 
             total_val_loss = total_val_loss / len(self.valid_data_loader)
 
-            # add DSL
             if self.config.DSL:
                 sims = sims * np_softmax(sims * 100, axis=0)
 
             metrics = self.metrics
             res = metrics(sims)
 
-            # Compute window metrics
             for m in res:
                 self.window_metric[m].append(res[m])
 
-            # Compute average of window metrics
             for m in self.window_metric:
                 res[m + "-window"] = np.mean(self.window_metric[m])
 
-            msg = (f"-----Val Epoch: {epoch}, dl: {step}/{num_steps}-----\n",
-                   f"R@1: {res['R1']} (window: {res['R1-window']})\n",
-                   f"R@5: {res['R5']} (window: {res['R5-window']})\n",
-                   f"R@10: {res['R10']} (window: {res['R10-window']})\n",
-                   f"MedR: {res['MedR']} (window: {res['MedR-window']})\n",
-                   f"MeanR: {res['MeanR']} (window: {res['MeanR-window']})\n",
-                   )
+            msg = (
+                f"-----Val Epoch: {epoch}, dl: {step}/{num_steps}-----\n"
+                f"R@1: {res['R1']} (window: {res['R1-window']})\n"
+                f"R@5: {res['R5']} (window: {res['R5-window']})\n"
+                f"R@10: {res['R10']} (window: {res['R10-window']})\n"
+                f"MedR: {res['MedR']} (window: {res['MedR-window']})\n"
+                f"MeanR: {res['MeanR']} (window: {res['MeanR-window']})\n"
+            )
             gen_log(model_path=self.config.model_path, log_name='log_trntst', msg=msg)
 
             res['loss_val'] = total_val_loss
