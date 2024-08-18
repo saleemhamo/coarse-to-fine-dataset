@@ -12,7 +12,7 @@ import torchvision.transforms as transforms
 class TACoSCoarseGrainedDataset(Dataset):
     def __init__(self, config: Config, json_file, split_file, img_transforms=None):
         self.videos_dir = config.videos_dir
-        dir = 'data/TACoS_CG'
+        dir = '../data/TACoS_CG'
         json_file = dir + '/' + json_file
         split_file = dir + '/' + split_file
 
