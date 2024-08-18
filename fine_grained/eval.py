@@ -14,15 +14,15 @@ from collections import defaultdict, OrderedDict
 from runner import build_vocab, build_vocab_from_pkl
 from runner import build_dataloader, build_model
 from runner import build_criterion
-from utils import TestOptions, AverageMeter
-from utils import PostProcessorDETR
-from utils import count_parameters, merge_state_dict_with_module
-from utils import span_cxw_to_xx 
-from utils import save_json, save_jsonl
-from utils import compute_temporal_iou_batch_cross
-from utils import interpolated_precision_recall, compute_temporal_iou_batch_paired
-from utils import get_window_len, temporal_nms
-from dataset import prepare_batch_input
+from fine_grained.utils import TestOptions, AverageMeter
+from fine_grained.utils import PostProcessorDETR
+from fine_grained.utils import count_parameters, merge_state_dict_with_module
+from fine_grained.utils import span_cxw_to_xx
+from fine_grained.utils import save_json, save_jsonl
+from fine_grained.utils import compute_temporal_iou_batch_cross
+from fine_grained.utils import interpolated_precision_recall, compute_temporal_iou_batch_paired
+from fine_grained.utils import get_window_len, temporal_nms
+from fine_grained.dataset import prepare_batch_input
 
 
 logger = logging.getLogger(__name__)
