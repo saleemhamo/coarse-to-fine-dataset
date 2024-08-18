@@ -47,8 +47,6 @@ class TACoSDataset(BaseDataset):
         }
         ann_file = os.path.join(self.ann_path, split2filename[self.split])
 
-        print(f"ann_file: {ann_file}")
-
         annotations = []
         with open(ann_file, 'r') as f:
             json_obj = json.load(f)

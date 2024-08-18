@@ -138,6 +138,9 @@ def fine_grained_eval(model, eval_loader, opt):
 
 
 def compute_unified_metrics(coarse_grained_results, fine_grained_results):
+    print(f"coarse_grained_results: {coarse_grained_results}")
+    print(f"fine_grained_results: {fine_grained_results}")
+
     # Combine coarse-grained and fine-grained results for unified evaluation
     unified_metrics = {}
     combined_results = zip(coarse_grained_results, fine_grained_results)
