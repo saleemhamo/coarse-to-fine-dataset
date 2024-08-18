@@ -38,7 +38,7 @@ def main():
     fine_grained_results = evaluate_fine_grained(coarse_grained_results)
 
     # Step 3: Compute Unified Metric
-    unified_metrics = compute_unified_metrics(coarse_grained_results, fine_grained_results)
+    unified_metrics = compute_combined_metrics(coarse_grained_results, fine_grained_results)
 
     # Step 4: Print Metrics
     print_metrics(unified_metrics)
