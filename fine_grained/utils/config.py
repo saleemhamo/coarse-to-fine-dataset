@@ -29,133 +29,133 @@ class BaseOptions(object):
 
         parser.add_argument("--config_file", type=str, default=None)
         
-        ## dataset
-        parser.add_argument("--dataset_name", type=str,
-                            choices=['charades', 'charades-cg', 'charades-cd', 'qvhighlights', 'tacos', 'TACoSCoarseGrained'])
-        parser.add_argument("--ann_path", type=str)
-        parser.add_argument("--feat_files", type=str, nargs="+",
-                            help="video feature dirs. If more than one, will concat their features. "
-                                 "Note that sub ctx features are also accepted here.")
-        parser.add_argument("--use_tef", default=False, action="store_true")
-        parser.add_argument("--clip_len", type=int, default=1)
-        parser.add_argument("--max_words_l", type=int, default=32)
-        parser.add_argument("--max_video_l", type=int, default=75)
-        parser.add_argument("--tokenizer_type", type=str, choices=['CLIP', 'GloVeSimple', 'GloVeNLTK'], default='CLIP')
-        parser.add_argument("--load_vocab_pkl", default=False, action="store_true",
-                            help="Only for tokenizer_type==GloveNLTK, fasttrack")
-        parser.add_argument("--bpe_path", type=str, default="data/bpe_simple_vocab_16e6.txt.gz")
-        parser.add_argument("--normalize_video", action="store_true")
-        parser.add_argument("--normalize_txt", action="store_true")
-        parser.add_argument("--contra_samples", type=int, default=2)
-        parser.add_argument("--batch_size", type=int, default=12)
-        parser.add_argument("--eval_batch_size", type=int, default=-1)
-        parser.add_argument("--num_workers", type=int, default=8)
-        parser.add_argument("--pin_memory", action="store_true")
-        parser.add_argument("--vocab_size", type=int, default=1111)
-        parser.add_argument("--max_windows", type=int, default=5)
-        parser.add_argument("--max_gather_size", type=int, default=-1)
-
-        ## model
-        parser.add_argument("--device", type=str, default="cuda", choices=["cuda", "cpu"])
-        # TextEncoder
-        parser.add_argument("--text_model_path", type=str, default='data/clip_text_encoder.pth')
-        # T2VEncoder & Transformer
-        parser.add_argument("--share_MLP", default=False, action="store_true")
-        parser.add_argument("--hidden_dim", type=int, default=256)
-        parser.add_argument("--dropout", type=float, default=0.1)
-        parser.add_argument("--nheads", type=int, default=8)
-        parser.add_argument("--dim_feedforward", type=int, default=1024)
-        parser.add_argument("--num_recfw_layers", type=int, default=2)
-        parser.add_argument("--t2v_layers", type=int, default=2)
-        parser.add_argument("--enc_layers", type=int, default=2)
-        parser.add_argument("--dec_layers", type=int, default=2)
-        parser.add_argument("--pre_norm", action="store_true")
-        # Position Embedding
-        parser.add_argument('--position_embedding', default='sine', type=str, choices=('sine', 'learned'),
-                            help="Type of positional embedding to use on top of the image features")
-        # DETR
-        parser.add_argument('--input_dropout', default=0.5, type=float,
-                            help="Dropout applied in input")
-        parser.add_argument("--v_feat_dim", type=int, help="video feature dim")
-        parser.add_argument("--t_feat_dim", type=int, help="text/query feature dim")
-        parser.add_argument('--num_queries', default=10, type=int,
-                            help="Number of query slots")
-        parser.add_argument("--use_txt_pos", action="store_true",
-                            help="use position_embedding for text as well.")
-        parser.add_argument("--n_input_proj", type=int, default=2,
-                            help="#layers to encoder input")
-        parser.add_argument("--rec_fw", default=False, action="store_true", help="frame-word level MESM")
-        parser.add_argument("--rec_ss", default=False, action="store_true", help="segment-sentence level MESM")
-        parser.add_argument("--num_recss_layers", type=int, default=4)
-
-        ## matcher
-        parser.add_argument('--set_cost_span', default=10, type=float,
-                            help="L1 span coefficient in the matching cost")
-        parser.add_argument('--set_cost_giou', default=1, type=float,
-                            help="giou span coefficient in the matching cost")
-        parser.add_argument('--set_cost_class', default=4, type=float,
-                            help="Class coefficient in the matching cost")
-
-        ## criterion
-        parser.add_argument("--span_loss_type", type=str, default="l1", choices=["l1", "ce"])
-        parser.add_argument("--aux_loss", default=False, action="store_true",
-                            help="Auxiliary decoding losses (loss at each layer)")
-        parser.add_argument("--rank_coef", type=float, default=12.0)
-        parser.add_argument("--use_triplet", default=False, action="store_true")
-        parser.add_argument("--saliency_margin", type=float, default=0.2)
-        parser.add_argument("--loss_span_coef", default=10, type=float)
-        parser.add_argument("--loss_giou_coef", default=1, type=float)
-        parser.add_argument("--loss_label_coef", default=4, type=float)
-        parser.add_argument("--loss_saliency_coef", default=1, type=float)
-        parser.add_argument("--eos_coef", default=0.1, type=float,
-                            help="Relative classification weight of the no-object class")
-        parser.add_argument("--loss_recfw_coef", default=0, type=float)
-        parser.add_argument("--loss_recss_coef", default=0, type=float)
-        parser.add_argument("--iou_gamma", default=0.9, type=float)
-        parser.add_argument("--recss_tau", default=0.5, type=float)
-
-        ## train
-        parser.add_argument("--exp_id", type=str, default=None,
-                            help="id of this run, required at training")
-        parser.add_argument("--seed", type=int, default=2019)
-        parser.add_argument("--lr", type=float, default=1e-4,
-                            help="learning rate")
-        parser.add_argument("--lr_drop", type=int, default=400,
-                            help="drop learning rate to 1/10 every lr_drop epochs")
-        parser.add_argument("--gamma", type=float, default=0.1)
-        parser.add_argument("--weight_decay", type=float, default=1e-4,
-                            help="weight decay")
-        parser.add_argument("--n_epoch", type=int, default=200,
-                            help="number of epochs to run")
-        parser.add_argument("--grad_clip", type=float, default=0.1,
-                            help="perform gradient clip, -1: disable")
-        parser.add_argument("--resume", type=str, default=None,
-                            help="checkpoint path to resume or evaluate, without --resume_all this only load weights")
-        parser.add_argument("--resume_all", action="store_true",
-                            help="if --resume_all, load optimizer/scheduler/epoch as well")
-        parser.add_argument("--start_epoch", type=int, default=None,
-                            help="if None, will be set automatically when using --resume_all")
-        parser.add_argument("--eval_untrained", action="store_true",
-                            help="Evaluate on un-trained model")
-        parser.add_argument("--max_es_cnt", type=int, default=200,
-                            help="number of epochs to early stop, use -1 to disable early stop")
-        parser.add_argument("--save_interval", type=int, default=50)
-        parser.add_argument("--result_root", type=str, default='./results')
-        parser.add_argument("--ctx_mode", type=str, default=None)
-        parser.add_argument("--stop_score", type=str, default='mAP')
-        
-        ## eval
-        parser.add_argument("--eval_epoch_interval", type=int, default=1)
-        parser.add_argument("--sort_results", action="store_true",
-                            help="sort results, not use this for moment query visualization")
-        parser.add_argument("--nms_thd", type=float, default=-1,
-                            help="additionally use non-maximum suppression "
-                                 "(or non-minimum suppression for distance)"
-                                 "to post-processing the predictions. "
-                                 "-1: do not use nms. [0, 1]")
-        parser.add_argument("--max_ts_val", type=float, default=150)
-        parser.add_argument("--max_before_nms", type=int, default=10)
-        parser.add_argument("--max_after_nms", type=int, default=10)
+        # ## dataset
+        # parser.add_argument("--dataset_name", type=str,
+        #                     choices=['charades', 'charades-cg', 'charades-cd', 'qvhighlights', 'tacos', 'TACoSCoarseGrained'])
+        # parser.add_argument("--ann_path", type=str)
+        # parser.add_argument("--feat_files", type=str, nargs="+",
+        #                     help="video feature dirs. If more than one, will concat their features. "
+        #                          "Note that sub ctx features are also accepted here.")
+        # parser.add_argument("--use_tef", default=False, action="store_true")
+        # parser.add_argument("--clip_len", type=int, default=1)
+        # parser.add_argument("--max_words_l", type=int, default=32)
+        # parser.add_argument("--max_video_l", type=int, default=75)
+        # parser.add_argument("--tokenizer_type", type=str, choices=['CLIP', 'GloVeSimple', 'GloVeNLTK'], default='CLIP')
+        # parser.add_argument("--load_vocab_pkl", default=False, action="store_true",
+        #                     help="Only for tokenizer_type==GloveNLTK, fasttrack")
+        # parser.add_argument("--bpe_path", type=str, default="data/bpe_simple_vocab_16e6.txt.gz")
+        # parser.add_argument("--normalize_video", action="store_true")
+        # parser.add_argument("--normalize_txt", action="store_true")
+        # parser.add_argument("--contra_samples", type=int, default=2)
+        # parser.add_argument("--batch_size", type=int, default=12)
+        # parser.add_argument("--eval_batch_size", type=int, default=-1)
+        # parser.add_argument("--num_workers", type=int, default=8)
+        # parser.add_argument("--pin_memory", action="store_true")
+        # parser.add_argument("--vocab_size", type=int, default=1111)
+        # parser.add_argument("--max_windows", type=int, default=5)
+        # parser.add_argument("--max_gather_size", type=int, default=-1)
+        #
+        # ## model
+        # parser.add_argument("--device", type=str, default="cuda", choices=["cuda", "cpu"])
+        # # TextEncoder
+        # parser.add_argument("--text_model_path", type=str, default='data/clip_text_encoder.pth')
+        # # T2VEncoder & Transformer
+        # parser.add_argument("--share_MLP", default=False, action="store_true")
+        # parser.add_argument("--hidden_dim", type=int, default=256)
+        # parser.add_argument("--dropout", type=float, default=0.1)
+        # parser.add_argument("--nheads", type=int, default=8)
+        # parser.add_argument("--dim_feedforward", type=int, default=1024)
+        # parser.add_argument("--num_recfw_layers", type=int, default=2)
+        # parser.add_argument("--t2v_layers", type=int, default=2)
+        # parser.add_argument("--enc_layers", type=int, default=2)
+        # parser.add_argument("--dec_layers", type=int, default=2)
+        # parser.add_argument("--pre_norm", action="store_true")
+        # # Position Embedding
+        # parser.add_argument('--position_embedding', default='sine', type=str, choices=('sine', 'learned'),
+        #                     help="Type of positional embedding to use on top of the image features")
+        # # DETR
+        # parser.add_argument('--input_dropout', default=0.5, type=float,
+        #                     help="Dropout applied in input")
+        # parser.add_argument("--v_feat_dim", type=int, help="video feature dim")
+        # parser.add_argument("--t_feat_dim", type=int, help="text/query feature dim")
+        # parser.add_argument('--num_queries', default=10, type=int,
+        #                     help="Number of query slots")
+        # parser.add_argument("--use_txt_pos", action="store_true",
+        #                     help="use position_embedding for text as well.")
+        # parser.add_argument("--n_input_proj", type=int, default=2,
+        #                     help="#layers to encoder input")
+        # parser.add_argument("--rec_fw", default=False, action="store_true", help="frame-word level MESM")
+        # parser.add_argument("--rec_ss", default=False, action="store_true", help="segment-sentence level MESM")
+        # parser.add_argument("--num_recss_layers", type=int, default=4)
+        #
+        # ## matcher
+        # parser.add_argument('--set_cost_span', default=10, type=float,
+        #                     help="L1 span coefficient in the matching cost")
+        # parser.add_argument('--set_cost_giou', default=1, type=float,
+        #                     help="giou span coefficient in the matching cost")
+        # parser.add_argument('--set_cost_class', default=4, type=float,
+        #                     help="Class coefficient in the matching cost")
+        #
+        # ## criterion
+        # parser.add_argument("--span_loss_type", type=str, default="l1", choices=["l1", "ce"])
+        # parser.add_argument("--aux_loss", default=False, action="store_true",
+        #                     help="Auxiliary decoding losses (loss at each layer)")
+        # parser.add_argument("--rank_coef", type=float, default=12.0)
+        # parser.add_argument("--use_triplet", default=False, action="store_true")
+        # parser.add_argument("--saliency_margin", type=float, default=0.2)
+        # parser.add_argument("--loss_span_coef", default=10, type=float)
+        # parser.add_argument("--loss_giou_coef", default=1, type=float)
+        # parser.add_argument("--loss_label_coef", default=4, type=float)
+        # parser.add_argument("--loss_saliency_coef", default=1, type=float)
+        # parser.add_argument("--eos_coef", default=0.1, type=float,
+        #                     help="Relative classification weight of the no-object class")
+        # parser.add_argument("--loss_recfw_coef", default=0, type=float)
+        # parser.add_argument("--loss_recss_coef", default=0, type=float)
+        # parser.add_argument("--iou_gamma", default=0.9, type=float)
+        # parser.add_argument("--recss_tau", default=0.5, type=float)
+        #
+        # ## train
+        # parser.add_argument("--exp_id", type=str, default=None,
+        #                     help="id of this run, required at training")
+        # parser.add_argument("--seed", type=int, default=2019)
+        # parser.add_argument("--lr", type=float, default=1e-4,
+        #                     help="learning rate")
+        # parser.add_argument("--lr_drop", type=int, default=400,
+        #                     help="drop learning rate to 1/10 every lr_drop epochs")
+        # parser.add_argument("--gamma", type=float, default=0.1)
+        # parser.add_argument("--weight_decay", type=float, default=1e-4,
+        #                     help="weight decay")
+        # parser.add_argument("--n_epoch", type=int, default=200,
+        #                     help="number of epochs to run")
+        # parser.add_argument("--grad_clip", type=float, default=0.1,
+        #                     help="perform gradient clip, -1: disable")
+        # parser.add_argument("--resume", type=str, default=None,
+        #                     help="checkpoint path to resume or evaluate, without --resume_all this only load weights")
+        # parser.add_argument("--resume_all", action="store_true",
+        #                     help="if --resume_all, load optimizer/scheduler/epoch as well")
+        # parser.add_argument("--start_epoch", type=int, default=None,
+        #                     help="if None, will be set automatically when using --resume_all")
+        # parser.add_argument("--eval_untrained", action="store_true",
+        #                     help="Evaluate on un-trained model")
+        # parser.add_argument("--max_es_cnt", type=int, default=200,
+        #                     help="number of epochs to early stop, use -1 to disable early stop")
+        # parser.add_argument("--save_interval", type=int, default=50)
+        # parser.add_argument("--result_root", type=str, default='./results')
+        # parser.add_argument("--ctx_mode", type=str, default=None)
+        # parser.add_argument("--stop_score", type=str, default='mAP')
+        #
+        # ## eval
+        # parser.add_argument("--eval_epoch_interval", type=int, default=1)
+        # parser.add_argument("--sort_results", action="store_true",
+        #                     help="sort results, not use this for moment query visualization")
+        # parser.add_argument("--nms_thd", type=float, default=-1,
+        #                     help="additionally use non-maximum suppression "
+        #                          "(or non-minimum suppression for distance)"
+        #                          "to post-processing the predictions. "
+        #                          "-1: do not use nms. [0, 1]")
+        # parser.add_argument("--max_ts_val", type=float, default=150)
+        # parser.add_argument("--max_before_nms", type=int, default=10)
+        # parser.add_argument("--max_after_nms", type=int, default=10)
 
         self.parser = parser
 
