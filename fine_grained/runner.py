@@ -43,6 +43,7 @@ def build_vocab_from_pkl(opt):
 
 def build_dataloader(opt, vocab=None):
     logger.info("Building dataset...")
+    print(f"opt: {opt}")
     name2dataset = {
         "charades": CharadesDataset,
         "charades-cg": CharadesCGDataset,
