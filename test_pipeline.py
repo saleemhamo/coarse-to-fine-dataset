@@ -164,6 +164,10 @@ def compute_unified_metrics(coarse_grained_results, fine_grained_results):
     if 'R5' in coarse_grained_results and 'scores' in fine_grained_results:
         fine_scores = np.array(fine_grained_results['scores'])
 
+        # Reshape fine_scores to ensure it has the correct number of dimensions
+        if fine_scores.ndim == 1:
+            fine_scores = fine_scores.reshape(-1, 1)
+
         # Compute mAP based on fine-grained scores (this assumes fine_scores are in the correct format)
         map_score = interpolated_precision_recall(fine_scores, fine_scores)
 
