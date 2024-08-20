@@ -1,7 +1,7 @@
 {
     "is_inference": true,
     "inference_id": "C3D_GloVe",
-    "inference_result_dir": "fine_grained/results/eval",
+    "inference_result_dir": "/nfs/workspace/coarse-to-fine-dataset/fine_grained/results/eval",
     "trained_result_dir": "/nfs/mesm_models/tacos",
 
     "num_workers": 8,
@@ -10,10 +10,10 @@
     "resume_all": false,
     "sort_results": true,
     "max_ts_val": 1000, 
-    "ann_path": "fine_grained/data/TACoS/annotations",
+    "ann_path": "/nfs/workspace/coarse-to-fine-dataset/fine_grained/data/TACoS/annotations",
     "feat_files": [
-        "fine_grained/data/TACoS/c3d.hdf5"
+        "/nfs/workspace/coarse-to-fine-dataset/fine_grained/data/TACoS/c3d.hdf5"
     ],
-    "bpe_path": "fine_grained/pretrained_models/bpe_simple_vocab_16e6.txt.gz",
-    "text_model_path": "fine_grained/pretrained_models/glove.6B.300d.txt"
+    "bpe_path": "/nfs/workspace/coarse-to-fine-dataset/fine_grained/pretrained_models/bpe_simple_vocab_16e6.txt.gz",
+    "text_model_path": "/nfs/workspace/coarse-to-fine-dataset/fine_grained/pretrained_models/glove.6B.300d.txt"
 }
