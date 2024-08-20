@@ -7,7 +7,7 @@ import numpy as np
 from tqdm import tqdm
 import torch.nn.functional as F
 
-from fine_grained.utils import pad_sequences_1d, span_xx_to_cxw
+from utils import pad_sequences_1d, span_xx_to_cxw
 from .base import BaseDataset
 
 

@@ -13,7 +13,7 @@ from model import GloVe, GloveTextEncoder
 from model import CLIPTextEncoder, T2VEncoder, T2VEncoder_TwoMLP, Transformer
 from model import PositionEmbeddingSine, TrainablePositionalEncoding
 from model import MESM, HungarianMatcher, Criterion
-from fine_grained.model import convert_weights
+from model import convert_weights
 
 
 logger = logging.getLogger(__name__)

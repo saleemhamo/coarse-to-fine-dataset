@@ -12,15 +12,15 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm, trange
 from collections import defaultdict
 
-from fine_grained.utils import BaseOptions
-from fine_grained.runner import build_vocab, build_vocab_from_pkl
-from fine_grained.runner import build_dataloader, build_model
-from fine_grained.runner import build_criterion, build_optimizer
-from fine_grained.dataset import prepare_batch_input
-from fine_grained.utils import AverageMeter
-from fine_grained.utils import dict_to_markdown, count_parameters
-from fine_grained.utils import state_dict_without_module
-from fine_grained.eval import eval_epoch
+from utils import BaseOptions
+from runner import build_vocab, build_vocab_from_pkl
+from runner import build_dataloader, build_model
+from runner import build_criterion, build_optimizer
+from dataset import prepare_batch_input
+from utils import AverageMeter
+from utils import dict_to_markdown, count_parameters
+from utils import state_dict_without_module
+from eval import eval_epoch
 
 
 logger = logging.getLogger(__name__)

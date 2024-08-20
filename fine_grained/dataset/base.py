@@ -7,7 +7,7 @@ from collections import defaultdict
 
 from .tokenizer import CLIPTokenizer, GloVeSimpleTokenizer
 from .tokenizer import NLTKTokenizer, NLTKTokenizerWithFeature
-from fine_grained.utils import pad_sequences_1d, span_xx_to_cxw
+from utils import pad_sequences_1d, span_xx_to_cxw
 
 
 class BaseDataset(Dataset):
