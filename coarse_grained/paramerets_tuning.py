@@ -27,7 +27,10 @@ def objective(trial):
     config.num_epochs = trial.suggest_int('num_epochs', 5, 50)
     config.weight_decay = trial.suggest_loguniform('weight_decay', 1e-5, 0.5)
     config.pooling_type = trial.suggest_categorical('pooling_type', ['topk', 'attention', 'mean'])
-    config.num_mha_heads = trial.suggest_int('num_mha_heads', 1, 16)
+    config.embed_dim = trial.suggest_categorical('embed_dim', [256, 512, 768, 1024])  # Add embed_dim to tuning
+    config.num_mha_heads = trial.suggest_categorical(
+        'num_mha_heads', [h for h in range(1, config.embed_dim + 1) if config.embed_dim % h == 0]
+    )
     config.attention_temperature = trial.suggest_uniform('attention_temperature', 0.01, 1.0)
     config.transformer_dropout = trial.suggest_uniform('transformer_dropout', 0.0, 0.5)
     config.seed = trial.suggest_int('seed', 0, 100)
