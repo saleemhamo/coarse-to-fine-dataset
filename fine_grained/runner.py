@@ -4,15 +4,15 @@ import torch
 import logging
 from torch.utils.data import DataLoader
 
-from fine_grained.dataset import Vocabulary
-from fine_grained.dataset import CharadesDataset, CharadesCGDataset, CharadesCDDataset
-from fine_grained.dataset import TACoSDataset, QVHighlightsDataset
-from fine_grained.dataset import SplitGatherBatchSampler
-from fine_grained.dataset import collate, collate_qvh
-from fine_grained.model import GloVe, GloveTextEncoder
-from fine_grained.model import CLIPTextEncoder, T2VEncoder, T2VEncoder_TwoMLP, Transformer
-from fine_grained.model import PositionEmbeddingSine, TrainablePositionalEncoding
-from fine_grained.model import MESM, HungarianMatcher, Criterion
+from dataset import Vocabulary
+from dataset import CharadesDataset, CharadesCGDataset, CharadesCDDataset
+from dataset import TACoSDataset, QVHighlightsDataset
+from dataset import SplitGatherBatchSampler
+from dataset import collate, collate_qvh
+from model import GloVe, GloveTextEncoder
+from model import CLIPTextEncoder, T2VEncoder, T2VEncoder_TwoMLP, Transformer
+from model import PositionEmbeddingSine, TrainablePositionalEncoding
+from model import MESM, HungarianMatcher, Criterion
 from fine_grained.model import convert_weights
 
 
