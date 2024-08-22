@@ -2,13 +2,13 @@ import os
 import torch
 import random
 import numpy as np
-from coarse_grained.config.all_config import AllConfig
-from coarse_grained.datasets.data_factory import DataFactory
-from coarse_grained.model.model_factory import ModelFactory
-from coarse_grained.modules.metrics import t2v_metrics, v2t_metrics
-from coarse_grained.modules.loss import LossFactory
-from coarse_grained.trainer.trainer_stochastic import Trainer
-from coarse_grained.config.all_config import gen_log
+from config.all_config import AllConfig
+from datasets.data_factory import DataFactory
+from model.model_factory import ModelFactory
+from modules.metrics import t2v_metrics, v2t_metrics
+from modules.loss import LossFactory
+from trainer.trainer_stochastic import Trainer
+from config.all_config import gen_log
 
 # @WJM: solve num_workers
 import torch.multiprocessing
