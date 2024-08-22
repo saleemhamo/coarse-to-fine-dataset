@@ -3,11 +3,11 @@ import time
 import torch
 import numpy as np
 from tqdm import tqdm
-from coarse_grained.config.all_config import gen_log
-from coarse_grained.config.base_config import Config
+from config.all_config import gen_log
+from config.base_config import Config
 from collections import defaultdict, deque
-from coarse_grained.trainer.base_trainer import BaseTrainer
-from coarse_grained.modules.metrics import sim_matrix_training, sim_matrix_inference_stochastic, \
+from trainer.base_trainer import BaseTrainer
+from modules.metrics import sim_matrix_training, sim_matrix_inference_stochastic, \
     sim_matrix_inference_stochastic_light_allops, generate_embeds_per_video_id_stochastic, np_softmax
 
 

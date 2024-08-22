@@ -1,7 +1,7 @@
 import torch
 import os
 from abc import abstractmethod
-from coarse_grained.config.base_config import Config
+from config.base_config import Config
 
 
 class BaseTrainer:

@@ -3,13 +3,13 @@ import torch
 import random
 import numpy as np
 import optuna
-from coarse_grained.modules.loss import LossFactory
-from coarse_grained.config.all_config import gen_log, AllConfig
-from coarse_grained.datasets.data_factory import DataFactory
-from coarse_grained.model.model_factory import ModelFactory
-from coarse_grained.trainer.trainer_stochastic import Trainer
-from coarse_grained.modules.metrics import t2v_metrics, v2t_metrics
-from coarse_grained.modules.optimization import AdamW, get_cosine_schedule_with_warmup
+from modules.loss import LossFactory
+from config.all_config import gen_log, AllConfig
+from datasets.data_factory import DataFactory
+from model.model_factory import ModelFactory
+from trainer.trainer_stochastic import Trainer
+from modules.metrics import t2v_metrics, v2t_metrics
+from modules.optimization import AdamW, get_cosine_schedule_with_warmup
 
 import torch.multiprocessing
 

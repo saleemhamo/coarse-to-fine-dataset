@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from collections import defaultdict
-from coarse_grained.modules.basic_utils import load_json
+from modules.basic_utils import load_json
 from torch.utils.data import Dataset
 from config.base_config import Config
 from datasets.video_capture import VideoCapture

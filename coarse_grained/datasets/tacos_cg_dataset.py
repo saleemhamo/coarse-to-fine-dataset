@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import Dataset
-from coarse_grained.config.base_config import Config
+from config.base_config import Config
 import torchvision.transforms as transforms
 
 
