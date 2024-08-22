@@ -1,9 +1,9 @@
-from coarse_grained.config.base_config import Config
-from coarse_grained.datasets.model_transforms import init_transform_dict
-from coarse_grained.datasets.msrvtt_dataset import MSRVTTDataset
-from coarse_grained.datasets.lsmdc_dataset import LSMDCDataset
-from coarse_grained.datasets.didemo_dataset import DiDeMoDataset
-from coarse_grained.datasets.tacos_cg_dataset import TACoSCoarseGrainedDataset
+from config.base_config import Config
+from datasets.model_transforms import init_transform_dict
+from datasets.msrvtt_dataset import MSRVTTDataset
+from datasets.lsmdc_dataset import LSMDCDataset
+from datasets.didemo_dataset import DiDeMoDataset
+from datasets.tacos_cg_dataset import TACoSCoarseGrainedDataset
 from torch.utils.data import DataLoader
 
 

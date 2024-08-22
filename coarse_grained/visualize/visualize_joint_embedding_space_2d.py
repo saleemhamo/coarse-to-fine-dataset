@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import torch
 from sklearn.decomposition import PCA
 
-from coarse_grained.config.all_config import AllConfig
-from coarse_grained.datasets.data_factory import DataFactory
-from coarse_grained.model.model_factory import ModelFactory
+from config.all_config import AllConfig
+from datasets.data_factory import DataFactory
+from model.model_factory import ModelFactory
 from transformers import CLIPTokenizer
 
 # Main function to create and save the plot

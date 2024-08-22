@@ -2,8 +2,8 @@ import csv
 import json
 import torch
 from torch.utils.data import Dataset
-from coarse_grained.config.base_config import Config
-from coarse_grained.datasets.rawvideo_util import RawVideoExtractor
+from config.base_config import Config
+from datasets.rawvideo_util import RawVideoExtractor
 
 
 def read_json(json_file):

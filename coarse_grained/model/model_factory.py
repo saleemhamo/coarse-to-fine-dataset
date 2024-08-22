@@ -1,5 +1,5 @@
-from coarse_grained.config.base_config import Config
-from coarse_grained.model.clip_stochastic import CLIPStochastic
+from config.base_config import Config
+from model.clip_stochastic import CLIPStochastic
 
 class ModelFactory:
     @staticmethod

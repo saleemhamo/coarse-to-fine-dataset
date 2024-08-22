@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from coarse_grained.config.base_config import Config
+from config.base_config import Config
 
 """
 Inputs (assume L2 normalized)
