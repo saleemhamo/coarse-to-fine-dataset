@@ -2,7 +2,7 @@ from openai import OpenAI
 import json
 
 client = OpenAI(
-    api_key='sk-TZ3LYEnQ7Uqr1Ch9Kugiei3lfdp4gFaHmJskpOl_eFT3BlbkFJolffCEGvKNmVkzCJcgL1eRB8aZb3o2nN-AAoUVWzIA'
+    api_key='xxxx'
 )
 
 
