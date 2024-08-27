@@ -60,6 +60,13 @@ The repository structure is designed to maintain clarity and organization, aidin
 
 *This table represents the performance metrics achieved in various datasets during the evaluation of the coarse-grained retrieval stage.*
 
+### Trained Models
+[Trained Models Link](https://drive.google.com/drive/folders/1WTfin66IOp3x6cV_A0A8QGIm4aFJfIEl?usp=sharing)
+
+### Generated TACoS-CG Annotations
+[Generated TACoS-CG Annotations Link](https://drive.google.com/drive/folders/1FOMKVY5KwfenmU6DILYKZ0FV3eZHd_e9?usp=sharing)
+
+
 ## Pipeline Overview
 
 The project follows a multi-stage pipeline designed to address the coarse-to-fine-grained text-video alignment problem:
