@@ -1,5 +1,33 @@
 
-# Coarse-to-Fine Grained Text-based Video-moment Retrieval
+# Coarse-to-Fine Grained Text-based Video and Video-moment Retrieval
+
+---
+
+> **Abstract:** *The viral growth of video content across digital platforms has created a significant demand
+for effective and accurate video retrieval systems. Traditional approaches, primarily rely on
+metadata or keyword-based searches, which puts limitations on handling complex retrieval
+tasks that require understanding visual semantics from videos and matching them with specific text queries. This dissertation addresses this challenge by proposing the Coarse-to-Fine
+Grained framework for text-based video and video-moment retrieval.
+The framework is divided into two stages: a coarse-grained retrieval stage that identifies relevant videos based on general text queries and a fine-grained retrieval stage that pinpoints
+specific moments within those videos using more detailed text queries. Leveraging recent advancements in multimodal learning and transformer architectures, particularly the T-MASS
+(Text Modeled as a Stochastic Embedding) and MESM (Modal-Enhanced Semantic Modeling) models, the proposed approach aims to enhance retrieval process by integrating these
+techniques into a unified pipeline.
+The research involved generating coarse-grained dataset annotations from fine-grained annotations of the known TACoS dataset, facilitating the evaluation of the proposed framework
+against existing state-of-the-art models. The results demonstrate that the Coarse-to-Fine
+Grained framework not only improves retrieval accuracy but also offers a more flexible and
+scalable solution for video content analysis.
+In conclusion, this dissertation presents a comprehensive solution to the dual challenges of
+video and video-moment retrieval, with potential applications ranging from security surveillance to enhancing search functionalities in large video libraries. Future work could explore
+further optimization of the framework and its application to broader datasets.*
+
+
+>
+> <p align="center">
+> <img width="940" src="GenericPipeline.png">
+> </p>
+
+
+---
 
 ## Overview
 
@@ -15,9 +43,6 @@ The repository is organized to facilitate the implementation and evaluation of e
   - [Paper](https://arxiv.org/abs/2306.15012)
   - [GitHub Repository](https://github.com/JIYANGGAO/grounded-video-description)
 
-## Top-Level Design of the Integrated Stages
-
-![Top-Level Design](GenericPipeline.png)
 
 ## Repository Structure
 
@@ -43,22 +68,32 @@ coarse-to-fine-grained-dataset/
 └── ctf_env.yaml                                  # YAML file to create Conda Env
 ```
 
-## Summary of Results & Achievements
+## Summary of Achievements
 
-The repository structure is designed to maintain clarity and organization, aiding collaboration and extending the work. Below are some key achievements and results:
+1. **Implemented and Evaluated Stages 1 and 2**: Successfully implemented and evaluated Stage 1 (Coarse-Grained Retrieval) and Stage 2 (Fine-Grained Retrieval) of the framework by leveraging the T-MASS approach for coarse-grained retrieval and the MESM approach for fine-grained retrieval.
 
-- **Coarse-Grained Retrieval**: Enhanced retrieval accuracy by incorporating stochastic embeddings.
-- **Fine-Grained Retrieval**: Applied advanced semantic modeling to improve segment detection.
-- **Pipeline Integration**: Achieved a hierarchical evaluation combining both stages for more accurate retrievals.
+2. **Hierarchical Coarse-to-Fine Video and Video-Moment Retrieval Pipeline**: Developed and evaluated a hierarchical pipeline for video and video-moment retrieval, which improves upon traditional text-video retrieval approaches.
 
-**Table of Metrics**:
+3. **Generated Coarse-Grained Annotations**: Created coarse-grained annotations for the TACoS dataset, which involved summarizing fine-grained annotations to facilitate coarse-grained retrieval.
 
-| Metric      | R@1   | R@5   | R@10  | MedR  | MeanR |
-|-------------|-------|-------|-------|-------|-------|
-| MSR-VTT     | 51.3  | 76.1  | 88.3  | 2.0   | 8.0   |
-| TACoS-CG    | 23.2  | 68.0  | 86.4  | 4.0   | 5.45  |
+4. **Designed a Model for Annotation Evaluation**: Developed a model to evaluate the generated coarse-grained dataset annotations by attempting to retrieve them based on fine-grained annotations.
 
-*This table represents the performance metrics achieved in various datasets during the evaluation of the coarse-grained retrieval stage.*
+5. **Comprehensive Evaluation**: Evaluated each stage of the framework and the combined pipeline using standard metrics, demonstrating the effectiveness of the approach compared to existing state-of-the-art models.
+
+## Hierarchical Evaluation Approach
+
+**Experiment #5: Hierarchical Evaluation Approach**
+
+This experiment aims to evaluate the coarse-to-fine-grained retrieval pipeline in a more suitable way compared to the modular approach. The same datasets and trained models were used, focusing on implementing a hierarchical flow of retrieval and evaluating based on mean and intersection over union metrics, which reflect the nature of the retrieved results.
+
+### Results
+
+| Metric     | Value  |
+|------------|--------|
+| Mean IoU   | 37.12  |
+| Max IoU    | 69.84  |
+
+Results on the combined dataset from TACoS and TACoS-CG in the hierarchical approach reflect the actual performance of the pipeline. The results of Mean IoU show the average overlap between the predicted video segments according to the fine-grained annotations and the ground truth segments of videos retrieved from the coarse-grained stage. The value of 37.21 for Mean IoU is relatively a good indicator that confirms the feasibility of such a framework, while the Max IoU value of 69.84 shows a potential for improving the mean performance of the integrated hierarchical approach.
 
 ### Trained Models
 [Trained Models Link](https://drive.google.com/drive/folders/1WTfin66IOp3x6cV_A0A8QGIm4aFJfIEl?usp=sharing)
@@ -66,67 +101,6 @@ The repository structure is designed to maintain clarity and organization, aidin
 ### Generated TACoS-CG Annotations
 [Generated TACoS-CG Annotations Link](https://drive.google.com/drive/folders/1FOMKVY5KwfenmU6DILYKZ0FV3eZHd_e9?usp=sharing)
 
-
-## Pipeline Overview
-
-The project follows a multi-stage pipeline designed to address the coarse-to-fine-grained text-video alignment problem:
-
-### 1. **Data Preparation**
-   - Load and preprocess video frames and annotations from datasets such as Charades-STA, TACoS, and QVHighlights.
-
-### 2. **Feature Extraction**
-   - Utilize pre-trained models like CLIP to extract visual and textual features from video frames and text descriptions.
-
-### 3. **Coarse-Grained Retrieval (Stage 1)**
-   - **Feature Embedding**: Convert features into stochastic embeddings using the T-MASS models.
-   - **Transformer Alignment**: Use transformer layers to align the video and text embeddings.
-   - **Similarity Calculation**: Retrieve the top K video segments most relevant to the text query.
-
-### 4. **Fine-Grained Retrieval (Stage 2)**
-   - **Feature Enhancement**: Enhance video and text features using the MESM model.
-   - **Segment Detection**: Identify the most relevant segments within the top videos.
-   - **Refinement**: Further refine the search results to improve granularity and accuracy.
-
-### 5. **Evaluation**
-   - Evaluate the model's performance using metrics such as Recall@K, Mean Average Precision (mAP), and Intersection over Union (IoU).
-
-## Running the Pipeline
-
-To run the pipeline, follow these steps:
-
-### 1. **Set Up the Environment**
-   - Install [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) if you haven't already.
-   - Create a Conda environment and install dependencies:
-     ```bash
-     conda create -n coarse_to_fine_env python=3.8
-     conda activate coarse_to_fine_env
-     pip install -r requirements.txt
-     ```
-
-### 2. **Clone the Repositories**
-   - Ensure all sub-repositories are initialized:
-     ```bash
-     git submodule update --init --recursive
-     ```
-
-### 3. **Run the Pipeline**
-   - Execute the main pipeline script:
-     ```bash
-     python main_pipeline.py
-     ```
-
-### 4. **Evaluation**
-   - Evaluate the complete model:
-     ```bash
-     python evaluation/evaluate.py
-     ```
-
-## References for Inner Repositories
-
-For more detailed instructions on specific components, refer to the respective `README.md` files in the sub-repositories:
-
-- **T-MASS and T-MASS-V2**: See `[coarse_grained/T-MASS/README.md](coarse_grained/T-MASS/README.md)` and `[coarse_grained/T-MASS-V2/README.md](coarse_grained/T-MASS-V2/README.md)`.
-- **MESM**: See `[fine_grained/MESM/README.md](fine_grained/MESM/README.md)`.
 
 ## Contributing
 
